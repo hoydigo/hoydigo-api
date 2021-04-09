@@ -28,5 +28,13 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
         Passport::routes();
+
+        Passport::tokensCan([
+            'test:get-users' => 'Get all users',
+            'test:register' => 'Register new users',
+            'test:test' => 'Test',
+        ]);
+
+        Passport::setDefaultScope([]);
     }
 }

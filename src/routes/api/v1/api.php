@@ -21,8 +21,6 @@ use Illuminate\Support\Facades\Route;
 // Users
 Route::prefix('/user')->group( function() {
     Route::post('/login', 'App\Http\Controllers\api\v1\LoginController@login');
-    Route::get('/all', [
-        'middleware' => 'auth:api',
-        'uses' => 'App\Http\Controllers\api\v1\user\UserController@index'
-        ]);
+    Route::get('/all', 'App\Http\Controllers\api\v1\user\UserController@index')
+        ->middleware(['auth:api', 'scopes:test:get-users']);;
 });

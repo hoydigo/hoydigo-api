@@ -15,7 +15,11 @@ class UserController extends Controller
      */
     public function index()
     {
-        return User::all();
+        try {
+            return User::all();
+        } catch (\Throwable $e) {
+            echo 'Hola';
+        }
     }
 
     /**
