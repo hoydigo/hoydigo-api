@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Controllers\api\v1;
 
-use App\Http\Controllers\api\v1\LoginController;
+use App\Http\Controllers\api\v1\AuthController;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -13,11 +13,11 @@ use Tests\TestCase;
  * Class LoginController
  *
  * Run these specific tests
- * php artisan test tests/Unit/Controllers/api/v1/LoginControllerTest.php
+ * php artisan test tests/Unit/Controllers/api/v1/AuthControllerTest.php
  *
  * @package Tests\Unit\Controllers\api\v1
  */
-class LoginControllerTest extends TestCase
+class AuthControllerTest extends TestCase
 {
     /**
      * @test
@@ -40,13 +40,13 @@ class LoginControllerTest extends TestCase
             ->getMock();
         Auth::shouldReceive('user')->once()->andReturn($user_mock);
 
-        $controller = new LoginController();
-        $request = Request::create('/api/v1/user/login', 'POST',[
+        $controller = new AuthController();
+        $request = Request::create('/api/v1/user/get_token', 'POST',[
             'email'     => $user_mock->email,
             'password'  => 'test123'
         ]);
 
-        $response =  $controller->login($request);
+        $response =  $controller->getToken($request);
 
         $response_content = json_decode($response->getContent());
         $user_mock->removeTokens();
@@ -66,13 +66,13 @@ class LoginControllerTest extends TestCase
     {
         Auth::shouldReceive('attempt')->once()->andReturn(0);
 
-        $controller = new LoginController();
-        $request = Request::create('/api/v1/user/login', 'POST',[
+        $controller = new AuthController();
+        $request = Request::create('/api/v1/user/get_token', 'POST',[
             'email'     => 'wrong@email.com',
             'password'  => 'test123'
         ]);
 
-        $response =  $controller->login($request);
+        $response =  $controller->getToken($request);
 
         $this->assertEquals(403, $response->getStatusCode());
         $this->assertEquals('Invalid login credentials.', json_decode($response->getContent())->message);
