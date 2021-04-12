@@ -24,19 +24,16 @@ class LoginController extends Controller
             return response()->json(['message' => 'Invalid login credentials.'], 403);
         }
 
-        $userTokens = Auth::user()->tokens;
-        foreach($userTokens as $token) {
-            $token->revoke();
-            $token->delete();
-        }
+        $user = Auth::user();
+        $user->removeTokens();
 
         $scopes = ['test:get-users', 'test:test'];
 
-        $access_token = Auth::user()->createToken('authToken', $scopes)->accessToken;
+        $access_token = $user->createToken('authToken', $scopes)->accessToken;
 
         return response([
-            'name' => Auth::user()->name,
-            'email' => Auth::user()->email,
+            'name' => $user->name,
+            'email' => $user->email,
             'access_token' => $access_token,
         ]);
     }
