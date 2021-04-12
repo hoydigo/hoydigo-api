@@ -28,21 +28,19 @@ class AuthControllerTest extends TestCase
     {
         Auth::shouldReceive('attempt')->once()->andReturn(1);
 
-        $token_mock = $this->getMockBuilder(PersonalAccessTokenResult::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $token_mock = $this->createMock(PersonalAccessTokenResult::class);
         $token_mock->accessToken = 'token_test';
 
-        $user = User::factory()->create();
-        $user_mock = \Mockery::mock($user)->shouldReceive('createToken')
-            ->once()
-            ->andReturn($token_mock)
-            ->getMock();
+        $user_mock = $this->createMock(User::class);
+        $user_mock->name = 'user_test';
+        $user_mock->email = 'user@test.com';
+        $user_mock->method('createToken')->willReturn($token_mock);
+
         Auth::shouldReceive('user')->once()->andReturn($user_mock);
 
         $controller = new AuthController();
         $request = Request::create('/api/v1/user/get_token', 'POST',[
-            'email'     => $user_mock->email,
+            'email'     => 'user@test.com',
             'password'  => 'test123'
         ]);
 
