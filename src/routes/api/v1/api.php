@@ -21,6 +21,8 @@ use Illuminate\Support\Facades\Route;
 // Users
 Route::prefix('/user')->group( function() {
     Route::post('/get_token', 'App\Http\Controllers\api\v1\AuthController@getToken');
+    Route::post('/register', 'App\Http\Controllers\api\v1\AuthController@register')
+        ->middleware(['auth:api', 'scopes:user:register']);;
     Route::get('/all', 'App\Http\Controllers\api\v1\user\UserController@index')
         ->middleware(['auth:api', 'scopes:test:get-users']);;
 });
