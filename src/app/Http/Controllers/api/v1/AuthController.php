@@ -31,9 +31,7 @@ class AuthController extends Controller
         $user = Auth::user();
         $user->removeTokens();
 
-        $scopes = ['test:get-users', 'test:test', 'user:register'];
-
-        $access_token = $user->createToken('authToken', $scopes)->accessToken;
+        $access_token = $user->createToken('authToken', $user->getScopes())->accessToken;
 
         return response()->json(
             [
@@ -55,6 +53,7 @@ class AuthController extends Controller
     public function register(Request $request): JsonResponse
     {
         $validation_rules = [
+            'role' => 'required|string|in:admin,web-guest,mobile-guest',
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|unique:users',
             'password' => 'required|string|min:6',
@@ -73,8 +72,9 @@ class AuthController extends Controller
         }
 
         User::create([
-            'name' => $request->name,
-            'email' => $request->email,
+            'role'     => $request->name,
+            'name'     => $request->name,
+            'email'    => $request->email,
             'password' => Hash::make($request->password),
         ]);
 

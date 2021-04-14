@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Config;
 use Laravel\Passport\HasApiTokens;
 
 class User extends Authenticatable
@@ -18,6 +19,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
+        'role',
         'name',
         'email',
         'password',
@@ -53,5 +55,15 @@ class User extends Authenticatable
             $token->revoke();
             $token->delete();
         }
+    }
+
+    /**
+     * Return scopes for the specific role
+     *
+     * @return array
+     */
+    public function getScopes(): array
+    {
+        return Config::get('roles.' . $this->role . '.scopes') ?? [];
     }
 }
