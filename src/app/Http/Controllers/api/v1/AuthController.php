@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\MessageBag;
 
 class AuthController extends Controller
 {
@@ -62,22 +63,37 @@ class AuthController extends Controller
         $validation = Validator::make($request->input(), $validation_rules);
 
         if ($validation->fails()) {
-            $errors = [];
-
-            foreach ($validation->errors()->getMessages() as $field => $err) {
-                $errors[$field] = is_array($err) ? reset($err) : $err;
-            }
-
-            return response()->json($errors, 400);
+            return response()->json($this->getArrayErrors($validation->errors()), 400);
         }
 
         User::create([
-            'role'     => $request->name,
+            'role'     => $request->role,
             'name'     => $request->name,
             'email'    => $request->email,
             'password' => Hash::make($request->password),
         ]);
 
         return response()->json(['message' => 'User registered successfully'], 200);
+    }
+
+    /**
+     * Return a array with the errors by field
+     *
+     * The errors come from a validator object. The idea is get the MessageBag
+     * from the method errors in an Illuminate\Contracts\Validation\Validator object.
+     *
+     * @param MessageBag $message_bag
+     *
+     * @return array
+     */
+    protected function getArrayErrors(MessageBag $message_bag): array
+    {
+        $errors = [];
+
+        foreach ($message_bag->getMessages() as $field => $err) {
+            $errors[$field] = is_array($err) ? reset($err) : $err;
+        }
+
+        return $errors;
     }
 }

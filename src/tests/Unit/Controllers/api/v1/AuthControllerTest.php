@@ -4,7 +4,9 @@ namespace Tests\Unit\Controllers\api\v1;
 
 use App\Http\Controllers\api\v1\AuthController;
 use App\Models\User;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Passport\PersonalAccessTokenResult;
 use Tests\TestCase;
@@ -74,5 +76,36 @@ class AuthControllerTest extends TestCase
 
         $this->assertEquals(403, $response->getStatusCode());
         $this->assertEquals('Invalid login credentials.', json_decode($response->getContent())->message);
+    }
+
+    /**
+     * @test
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
+     *
+     * @return void
+     */
+    public function user_registered_successfully(): void
+    {
+        $validator_mock = $this->createMock(Validator::class);
+        $validator_mock->method('fails')->willReturn(false);
+        \Illuminate\Support\Facades\Validator::shouldReceive('make')->once()->andReturn($validator_mock);
+
+        $client_mock = \Mockery::mock('overload:App\Models\User');
+        $client_mock->shouldReceive('create')->andReturn($client_mock);
+        App::instance('\App\Models\User', $client_mock);
+
+        $controller = new AuthController();
+        $request = Request::create('/api/v1/user/register', 'POST',[
+            'role'     => 'web-guest',
+            'name'     => 'Unit Test 4',
+            'email'    => 'unit4.test@email.com',
+            'password' => 'test123'
+        ]);
+
+        $response =  $controller->register($request);
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals('User registered successfully', json_decode($response->getContent())->message);
     }
 }
