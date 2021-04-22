@@ -8,6 +8,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\MessageBag;
 use Laravel\Passport\PersonalAccessTokenResult;
 use Tests\TestCase;
 
@@ -80,6 +81,7 @@ class AuthControllerTest extends TestCase
 
     /**
      * @test
+     *
      * @runInSeparateProcess
      * @preserveGlobalState disabled
      *
@@ -107,5 +109,38 @@ class AuthControllerTest extends TestCase
 
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals('User registered successfully', json_decode($response->getContent())->message);
+    }
+
+    /**
+     * @test
+     *
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
+     *
+     * @return void
+     */
+    public function user_registered_unsuccessfully(): void
+    {
+        $message_errors = $this->createMock(MessageBag::class);
+        $message_errors->method('getMessages')->willReturn(['field1' => 'error1', 'field2' => 'error2']);
+
+        $validator_mock = $this->createMock(Validator::class);
+        $validator_mock->method('fails')->willReturn(true);
+        $validator_mock->method('errors')->willReturn($message_errors);
+        \Illuminate\Support\Facades\Validator::shouldReceive('make')->once()->andReturn($validator_mock);
+
+        $controller = new AuthController();
+        $request = Request::create('/api/v1/user/register', 'POST',[
+            'role'     => 'web-guest',
+            'name'     => 'Unit Test 4',
+            'email'    => 'unit4.test@email.com',
+            'password' => 'test123'
+        ]);
+
+        $response =  $controller->register($request);
+
+        $this->assertEquals(400, $response->getStatusCode());
+        $this->assertEquals('error1', json_decode($response->getContent())->field1);
+        $this->assertEquals('error2', json_decode($response->getContent())->field2);
     }
 }
