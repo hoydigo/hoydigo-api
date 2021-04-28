@@ -1,0 +1,205 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "hoydigo API",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/v1/user/get_token": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Get new access token",
+                "description": "Get new access token",
+                "operationId": "getToken",
+                "requestBody": {
+                    "description": "Pass user credentials",
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "user1@mail.com"
+                                    },
+                                    "password": {
+                                        "type": "password",
+                                        "format": "password",
+                                        "example": "1234567"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "New token returned",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "required": [
+                                        "email",
+                                        "password"
+                                    ],
+                                    "properties": {
+                                        "name": {
+                                            "type": "string",
+                                            "format": "text",
+                                            "example": "User Name"
+                                        },
+                                        "email": {
+                                            "type": "string",
+                                            "format": "email",
+                                            "example": "user1@mail.com"
+                                        },
+                                        "access_token": {
+                                            "type": "string",
+                                            "format": "text",
+                                            "example": "NEW_ACESS_TOKEN"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Invalid login credentials"
+                    }
+                }
+            }
+        },
+        "/api/v1/user/register": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Register a new user",
+                "description": "Create a new user in the app",
+                "operationId": "registerUser",
+                "requestBody": {
+                    "description": "Fields dor the new user",
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "description": "Register a new user",
+                                        "type": "string",
+                                        "format": "text",
+                                        "example": "User Name"
+                                    },
+                                    "email": {
+                                        "description": "Register a new user",
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "user1@mail.com"
+                                    },
+                                    "password": {
+                                        "description": "Register a new user",
+                                        "type": "password",
+                                        "format": "password",
+                                        "example": "1234567"
+                                    },
+                                    "role": {
+                                        "description": "Register a new user",
+                                        "type": "string",
+                                        "format": "text",
+                                        "example": "web-guest"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "New user registered",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "Register a new user",
+                                            "type": "string",
+                                            "format": "text",
+                                            "example": "User registered successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "Register a new user",
+                                            "type": "string",
+                                            "format": "text",
+                                            "example": "Unauthenticated"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "field1": {
+                                            "description": "Register a new user",
+                                            "type": "string",
+                                            "format": "text",
+                                            "example": "Error description"
+                                        },
+                                        "field2": {
+                                            "description": "Register a new user",
+                                            "type": "string",
+                                            "format": "text",
+                                            "example": "Error description"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearer": {
+                "type": "http",
+                "name": "Bearer Token",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "security": [
+        []
+    ]
+}
