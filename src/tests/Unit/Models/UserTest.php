@@ -31,7 +31,7 @@ class UserTest extends TestCase
 
         $user->removeTokens();
 
-        $this->assertTrue(true);
+        $this->assertTrue(false);
 
     }
 
