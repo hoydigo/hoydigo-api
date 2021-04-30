@@ -14,7 +14,16 @@ class CreatePositionsTable extends Migration
     public function up()
     {
         Schema::create('positions', function (Blueprint $table) {
-            $table->id();
+            $table->string('id', 6)->unique();
+            $table->string('country_id', 3);
+            $table->foreign('country_id')->references('id')->on('countries')->onDelete('cascade');
+            $table->integer('state_id');
+            $table->foreign('state_id')->references('id')->on('states')->onDelete('cascade');
+            $table->integer('city_id');
+            $table->foreign('city_id')->references('id')->on('cities')->onDelete('cascade');
+            $table->string('sector', 100);
+            $table->string('name', 100);
+            $table->string('description', 280);
             $table->timestamps();
         });
     }

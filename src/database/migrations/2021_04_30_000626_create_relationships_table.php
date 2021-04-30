@@ -14,7 +14,11 @@ class CreateRelationshipsTable extends Migration
     public function up()
     {
         Schema::create('relationships', function (Blueprint $table) {
-            $table->id();
+            $table->integer('influencer_id');
+            $table->foreign('influencer_id')->references('id')->on('influencers')->onDelete('cascade');
+            $table->integer('relative_id');
+            $table->foreign('relative_id')->references('id')->on('influencers')->onDelete('cascade');
+            $table->string('relation', 10);
             $table->timestamps();
         });
     }
