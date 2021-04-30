@@ -16,7 +16,7 @@ class CreatePoliticalPositionsTable extends Migration
         Schema::create('political_positions', function (Blueprint $table) {
             $table->string('id', 3)->unique();
             $table->string('name', 40);
-            $table->string('description', 140);
+            $table->string('description', 600);
             $table->timestamps();
         });
     }
