@@ -16,7 +16,6 @@ class CreatePoliticalPartiesTable extends Migration
         Schema::create('political_parties', function (Blueprint $table) {
             $table->id();
             $table->string('political_position_id', 3);
-            $table->foreign('political_position_id')->references('id')->on('political_positions')->onDelete('cascade');
             $table->string('name', 40);
             $table->string('description', 140);
             $table->timestamps();
