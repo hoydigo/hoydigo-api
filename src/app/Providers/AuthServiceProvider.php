@@ -34,9 +34,8 @@ class AuthServiceProvider extends ServiceProvider
         Passport::personalAccessTokensExpireIn(now()->addDays(1));
 
         Passport::tokensCan([
-            'user:register' => 'Register new users',
-            'test:get-users' => 'Get all users',
-            'test:test' => 'Test',
+            'auth:register' => 'Register new users',
+            'admin:political-party:create' => 'Create a new political party',
         ]);
 
         Passport::setDefaultScope([]);

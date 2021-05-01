@@ -16,8 +16,8 @@ return [
 
     'admin' => [
         'scopes' => [
-            'user:register',
-            'test:get-users'
+            'auth:register',
+            'admin:political-party:create'
         ]
     ],
 

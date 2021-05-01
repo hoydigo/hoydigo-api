@@ -63,7 +63,6 @@ class AuthController extends Controller
         }
 
         $user = Auth::user();
-        $user->removeTokens();
 
         $access_token = $user->createToken('authToken', $user->getScopes())->accessToken;
 

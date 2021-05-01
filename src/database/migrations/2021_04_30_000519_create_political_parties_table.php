@@ -14,10 +14,10 @@ class CreatePoliticalPartiesTable extends Migration
     public function up()
     {
         Schema::create('political_parties', function (Blueprint $table) {
-            $table->id();
+            $table->string('id', 5)->unique();
             $table->string('political_position_id', 3);
             $table->string('name', 40);
-            $table->string('description', 140);
+            $table->string('description', 140)->nullable();
             $table->timestamps();
         });
     }
