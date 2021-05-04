@@ -10,6 +10,11 @@ use Illuminate\Http\JsonResponse;
 
 class PoliticalPartyController extends Controller
 {
+    /**
+     * Returns all political parties
+     *
+     * @return PoliticalPartyCollection
+     */
     public function index(): PoliticalPartyCollection
     {
         try {
