@@ -46,7 +46,14 @@ class UserTest extends TestCase
             ->makePartial();
         $user->role = 'admin';
         $user->getScopes();
-        $this->assertEquals(['auth:register', 'admin:political-party:create'], $user->getScopes());
+        $this->assertEquals(
+            [
+                'auth:register',
+                'admin:political-party:list',
+                'admin:political-party:create'
+            ],
+            $user->getScopes()
+        );
     }
 
 }
