@@ -19,6 +19,7 @@ return [
             'auth:register',
             'admin:political-party:list',
             'admin:political-party:create',
+            'admin:political-party:get',
         ]
     ],
 

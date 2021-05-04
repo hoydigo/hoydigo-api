@@ -50,7 +50,8 @@ class UserTest extends TestCase
             [
                 'auth:register',
                 'admin:political-party:list',
-                'admin:political-party:create'
+                'admin:political-party:create',
+                'admin:political-party:get'
             ],
             $user->getScopes()
         );

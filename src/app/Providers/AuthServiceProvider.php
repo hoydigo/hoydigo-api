@@ -37,6 +37,7 @@ class AuthServiceProvider extends ServiceProvider
             'auth:register' => 'Register new users',
             'admin:political-party:list' => 'List all political parties',
             'admin:political-party:create' => 'Create a new political party',
+            'admin:political-party:get' => 'Get a specific political party',
         ]);
 
         Passport::setDefaultScope([]);
