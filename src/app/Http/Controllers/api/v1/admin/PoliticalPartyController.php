@@ -4,6 +4,7 @@ namespace App\Http\Controllers\api\v1\admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\admin\StorePoliticalPartyRequest;
+use App\Http\Requests\admin\UpdatePoliticalPartyRequest;
 use App\Http\Resources\admin\PoliticalPartyCollection;
 use App\Http\Resources\admin\PoliticalPartyResource;
 use App\Models\PoliticalParty;
@@ -76,6 +77,36 @@ class PoliticalPartyController extends Controller
             if (is_null($political_party)) {
                 return response()->json(['message' => 'Political party not found'], 404);
             }
+
+            return (new PoliticalPartyResource($political_party))->response()->setStatusCode(200);
+
+        } catch (\Throwable $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
+    }
+
+    /**
+     * Update a specific political party
+     *
+     * @param UpdatePoliticalPartyRequest $request
+     * @param string $political_party_id
+     *
+     * @return JsonResponse
+     */
+    public function update(UpdatePoliticalPartyRequest $request, string $political_party_id): JsonResponse
+    {
+        try {
+            $political_party = PoliticalParty::find($political_party_id);
+
+            if (is_null($political_party)) {
+                return response()->json(['message' => 'Political party not found'], 404);
+            }
+
+            $political_party->political_position_id = $request->political_position_id ?? $political_party->political_position_id;
+            $political_party->name = $request->name ?? $political_party->name;
+            $political_party->description = $request->description ?? $political_party->description;
+
+            $political_party->save();
 
             return (new PoliticalPartyResource($political_party))->response()->setStatusCode(200);
 

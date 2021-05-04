@@ -23,4 +23,5 @@ Route::prefix('/admin')->group(function () {
     Route::get('/political-party', 'App\Http\Controllers\api\v1\admin\PoliticalPartyController@index')->middleware(['auth:api', 'scopes:admin:political-party:list']);
     Route::post('/political-party', 'App\Http\Controllers\api\v1\admin\PoliticalPartyController@store')->middleware(['auth:api', 'scopes:admin:political-party:create']);
     Route::get('/political-party/{political_party_id}', 'App\Http\Controllers\api\v1\admin\PoliticalPartyController@show')->middleware(['auth:api', 'scopes:admin:political-party:get']);
+    Route::patch('/political-party/{political_party_id}', 'App\Http\Controllers\api\v1\admin\PoliticalPartyController@update')->middleware(['auth:api', 'scopes:admin:political-party:update']);
 });

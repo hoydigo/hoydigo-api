@@ -20,6 +20,7 @@ return [
             'admin:political-party:list',
             'admin:political-party:create',
             'admin:political-party:get',
+            'admin:political-party:update',
         ]
     ],
 
