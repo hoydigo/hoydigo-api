@@ -35,6 +35,7 @@ class AuthServiceProvider extends ServiceProvider
 
         Passport::tokensCan([
             'auth:register' => 'Register new users',
+            'admin:political-party:list' => 'List all political parties',
             'admin:political-party:create' => 'Create a new political party',
         ]);
 
