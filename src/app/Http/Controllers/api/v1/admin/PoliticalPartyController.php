@@ -16,6 +16,9 @@ class PoliticalPartyController extends Controller
     /**
      * Returns all political parties
      *
+     * It is returning the political parties in pagination
+     * the amount of parties per page is 20.
+     *
      * @return JsonResponse
      */
     public function index(): JsonResponse
@@ -28,7 +31,6 @@ class PoliticalPartyController extends Controller
         } catch (\Throwable $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
-
     }
 
     /**
