@@ -21,7 +21,7 @@ class PoliticalPartyController extends Controller
     public function index(): JsonResponse
     {
         try {
-            $parties = PoliticalParty::all();
+            $parties = PoliticalParty::orderBy('name', 'asc')->paginate(20);
 
             return (new PoliticalPartyCollection($parties))->response()->setStatusCode(200);
 

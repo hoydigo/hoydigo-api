@@ -19,6 +19,8 @@ Route::prefix('/auth')->group(function() {
     Route::post('/register', 'App\Http\Controllers\api\v1\AuthController@register')->middleware(['auth:api', 'scopes:auth:register']);
 });
 
+// Admin routesup
+
 Route::prefix('/admin')->group(function () {
     Route::get('/political-party', 'App\Http\Controllers\api\v1\admin\PoliticalPartyController@index')->middleware(['auth:api', 'scopes:admin:political-party:list']);
     Route::post('/political-party', 'App\Http\Controllers\api\v1\admin\PoliticalPartyController@store')->middleware(['auth:api', 'scopes:admin:political-party:create']);

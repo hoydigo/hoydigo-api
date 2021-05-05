@@ -18,13 +18,14 @@ class PoliticalPartyCollection extends ResourceCollection
             'data' => array_map(function ($party) {
                 return [
                     'id' => $party->id,
+                    'name' => $party->name,
+                    'description' => $party->description,
                     'political_position' => [
                         'id' => $party->politicalPosition->id,
                         'name' => $party->politicalPosition->name,
                         'description' => $party->politicalPosition->description
                     ],
-                    'name' => $party->name,
-                    'description' => $party->description,                ];
+                ];
             }, $this->all())
         ];
     }
