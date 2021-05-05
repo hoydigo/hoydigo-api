@@ -108,7 +108,7 @@ class PoliticalPartyController extends Controller
      *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="List of political parties",
+     *         description="Political party created",
      *         @OA\JsonContent(
      *              @OA\Property(property="data", type="array", example={"id": "MIPAR", "name": "Mi partido", "description": "Description del partido", "political_position": {"id": "CEN","name": "Centro", "description": "Se conoce por centro ..."}},
      *                  @OA\Items(
@@ -194,7 +194,7 @@ class PoliticalPartyController extends Controller
      *     @OA\Parameter(name="political_party_id", in="path", required=true, example="CECOL"),
      *     @OA\Response(
      *         response=200,
-     *         description="List of political parties",
+     *         description="Specific political party",
      *         @OA\JsonContent(
      *              @OA\Property(property="data", type="array", example={"id": "MIPAR", "name": "Mi partido", "description": "Description del partido", "political_position": {"id": "CEN","name": "Centro", "description": "Se conoce por centro ..."}},
      *                  @OA\Items(
@@ -284,7 +284,7 @@ class PoliticalPartyController extends Controller
      *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="List of political parties",
+     *         description="Political party updated",
      *         @OA\JsonContent(
      *              @OA\Property(property="data", type="array", example={"id": "MIPAR", "name": "Mi partido", "description": "Description del partido", "political_position": {"id": "CEN","name": "Centro", "description": "Se conoce por centro ..."}},
      *                  @OA\Items(
@@ -365,6 +365,38 @@ class PoliticalPartyController extends Controller
      * @param string $political_party_id
      *
      * @return JsonResponse
+     *
+     * @OA\Delete(
+     *     path="/api/v1/admin/political-party/{political_party_id}",
+     *     tags={"Admin - Political Party"},
+     *     summary="Delete a specific political party",
+     *     description="Delete a specific political party",
+     *     operationId="deletePoliticalParty",
+     *     security={{ "bearer": {} }},
+     *     @OA\Parameter(name="political_party_id", in="path", required=true, example="CECOL"),
+     *     @OA\Response(response=204, description="null"),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthenticated",
+     *         @OA\JsonContent(
+     *              @OA\Property(property="message", type="string", format="text", example="Unauthenticated"),
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response=403,
+     *         description="User without permission to the endpoint",
+     *         @OA\JsonContent(
+     *              @OA\Property(property="message", type="string", format="text", example="Permission denied."),
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Political party not found",
+     *         @OA\JsonContent(
+     *              @OA\Property(property="message", type="string", format="text", example="Political party not found"),
+     *         ),
+     *     ),
+     * )
      */
     public function destroy(Request $request, string $political_party_id): JsonResponse
     {
