@@ -32,7 +32,6 @@ class PoliticalPartyController extends Controller
      *         response=200,
      *         description="List of political parties",
      *         @OA\JsonContent(
-     *              required={"email","password"},
      *              @OA\Property(property="data", type="array", example={{"id": "MIPA2", "name": "Mi partido", "description": "Description del partido", "political_position": {"id": "CEN","name": "Centro", "description": "Se conoce por centro ..."}}, {"id": "MIPAR", "name": "Mi partido", "description": "Description del partido", "political_position": {"id": "CEN","name": "Centro", "description": "Se conoce por centro ..."}}},
      *                  @OA\Items(
      *                      @OA\Property(property="id", type="string", format="text", example="CECOL"),
@@ -86,6 +85,73 @@ class PoliticalPartyController extends Controller
      * @param StorePoliticalPartyRequest $request
      *
      * @return JsonResponse
+     *
+     * @OA\Post(
+     *     path="/api/v1/admin/political-party",
+     *     tags={"Admin - Political Party"},
+     *     summary="Create a new political party",
+     *     description="Create a new political party",
+     *     operationId="createPoliticalParty",
+     *     security={{ "bearer": {} }},
+     *     @OA\RequestBody(
+     *      required=true,
+     *      description="Fields dor the new user",
+     *      @OA\MediaType(
+     *          mediaType="multipart/form-data",
+     *          @OA\Schema(
+     *              @OA\Property(property="id", type="string", format="text", example="CECOL"),
+     *              @OA\Property(property="political_position_id", type="string", example="CEN"),
+     *              @OA\Property(property="name", type="string", example="Partido Politico"),
+     *              @OA\Property(property="description", type="string", example="Descripción partido politico"),
+     *          ),
+     *      ),
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="List of political parties",
+     *         @OA\JsonContent(
+     *              @OA\Property(property="data", type="array", example={"id": "MIPAR", "name": "Mi partido", "description": "Description del partido", "political_position": {"id": "CEN","name": "Centro", "description": "Se conoce por centro ..."}},
+     *                  @OA\Items(
+     *                      @OA\Property(property="id", type="string", format="text", example="CECOL"),
+     *                      @OA\Property(property="name", type="string", format="email", example="Centro Colombia"),
+     *                      @OA\Property(property="description", type="string", format="text", example="Descripcion de centro colombia"),
+     *                      @OA\Property(
+     *                          property="political_position",
+     *                          type="array",
+     *                          example={"id": "CEN","name": "Centro", "description": "Se conoce por centro ..."},
+     *                          @OA\Items(
+     *                              @OA\Property(property="id", type="string", example="CEN"),
+     *                              @OA\Property(property="name", type="string", example="Centro"),
+     *                              @OA\Property(property="description", type="string", example="Se conoce por centro ...")
+     *                          ),
+     *                      ),
+     *                  ),
+     *              ),
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthenticated",
+     *         @OA\JsonContent(
+     *              @OA\Property(property="message", type="string", format="text", example="Unauthenticated"),
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response=403,
+     *         description="User without permission to the endpoint",
+     *         @OA\JsonContent(
+     *              @OA\Property(property="message", type="string", format="text", example="Permission denied."),
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Unprocessable Entity",
+     *         @OA\JsonContent(
+     *              @OA\Property(property="message", type="string", example="The given data was invalid."),
+     *              @OA\Property(property="errors", example="{'field':['Error message']}"),
+     *         ),
+     *     ),
+     * )
      */
     public function store(StorePoliticalPartyRequest $request): JsonResponse
     {
