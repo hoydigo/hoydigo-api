@@ -183,6 +183,60 @@ class PoliticalPartyController extends Controller
      * @param string $political_party_id
      *
      * @return JsonResponse
+     *
+     * @OA\Get(
+     *     path="/api/v1/admin/political-party/{political_party_id}",
+     *     tags={"Admin - Political Party"},
+     *     summary="Get a specific political party",
+     *     description="Get a specific political party",
+     *     operationId="getPoliticalParty",
+     *     security={{ "bearer": {} }},
+     *     @OA\Parameter(name="political_party_id", in="path", required=true, example="CECOL"),
+     *     @OA\Response(
+     *         response=200,
+     *         description="List of political parties",
+     *         @OA\JsonContent(
+     *              @OA\Property(property="data", type="array", example={"id": "MIPAR", "name": "Mi partido", "description": "Description del partido", "political_position": {"id": "CEN","name": "Centro", "description": "Se conoce por centro ..."}},
+     *                  @OA\Items(
+     *                      @OA\Property(property="id", type="string", format="text", example="CECOL"),
+     *                      @OA\Property(property="name", type="string", format="email", example="Centro Colombia"),
+     *                      @OA\Property(property="description", type="string", format="text", example="Descripcion de centro colombia"),
+     *                      @OA\Property(
+     *                          property="political_position",
+     *                          type="array",
+     *                          example={"id": "CEN","name": "Centro", "description": "Se conoce por centro ..."},
+     *                          @OA\Items(
+     *                              @OA\Property(property="id", type="string", example="CEN"),
+     *                              @OA\Property(property="name", type="string", example="Centro"),
+     *                              @OA\Property(property="description", type="string", example="Se conoce por centro ...")
+     *                          ),
+     *                      ),
+     *                  ),
+     *              ),
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthenticated",
+     *         @OA\JsonContent(
+     *              @OA\Property(property="message", type="string", format="text", example="Unauthenticated"),
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response=403,
+     *         description="User without permission to the endpoint",
+     *         @OA\JsonContent(
+     *              @OA\Property(property="message", type="string", format="text", example="Permission denied."),
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Political party not found",
+     *         @OA\JsonContent(
+     *              @OA\Property(property="message", type="string", format="text", example="Political party not found"),
+     *         ),
+     *     ),
+     * )
      */
     public function show(Request $request, string $political_party_id): JsonResponse
     {
