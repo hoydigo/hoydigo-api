@@ -114,4 +114,30 @@ class PoliticalPartyController extends Controller
             return response()->json(['message' => $e->getMessage()], 500);
         }
     }
+
+    /**
+     * Delete a political party
+     *
+     * @param Request $request
+     * @param string $political_party_id
+     *
+     * @return JsonResponse
+     */
+    public function destroy(Request $request, string $political_party_id): JsonResponse
+    {
+        try {
+            $political_party = PoliticalParty::find($political_party_id);
+
+            if (is_null($political_party)) {
+                return response()->json(['message' => 'Political party not found'], 404);
+            }
+
+            $political_party->delete();
+
+            return response()->json(null, 204);
+
+        } catch (\Throwable $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
+    }
 }

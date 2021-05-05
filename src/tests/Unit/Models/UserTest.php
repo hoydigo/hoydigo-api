@@ -53,6 +53,7 @@ class UserTest extends TestCase
                 'admin:political-party:create',
                 'admin:political-party:get',
                 'admin:political-party:update',
+                'admin:political-party:delete',
             ],
             $user->getScopes()
         );
