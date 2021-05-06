@@ -5,7 +5,7 @@ namespace Tests\Feature\Http\Controllers\api\v1\admin;
 
 use App\Models\PoliticalParty;
 use Illuminate\Support\Str;
-use Tests\Feature\Http\Controllers\api\v1\ApiTest;
+use Tests\Feature\Http\Controllers\api\v1\TestApi;
 
 /**
  * Class PoliticalPartyControllerTest
@@ -15,7 +15,7 @@ use Tests\Feature\Http\Controllers\api\v1\ApiTest;
  *
  * @package Tests\Unit\Controllers\api\v1\admin
  */
-class PoliticalPartyControllerTest extends ApiTest
+class PoliticalPartyControllerTest extends TestApi
 {
     /**
      * Political party api endpoint
@@ -58,7 +58,8 @@ class PoliticalPartyControllerTest extends ApiTest
             PoliticalParty::create($political_party_data);
         }
 
-        $response = $this->withHeader('Authorization', 'Bearer ' . $this->getToken())->json('GET', self::ENDPOINT);
+        $response = $this->withHeader('Authorization', 'Bearer ' . $this->getToken())
+            ->json('GET', self::ENDPOINT);
 
         $response->assertStatus(200);
         $response->assertJsonCount(3, ['data']);
@@ -66,5 +67,26 @@ class PoliticalPartyControllerTest extends ApiTest
         $response->assertSee($mock_political_parties[1]['political_position_id']);
         $response->assertSee($mock_political_parties[2]['name']);
         $response->assertJsonCount(4, ['links']);
+    }
+
+    /**
+     * @test
+     *
+     * @return void
+     */
+    public function user_can_store_a_new_political_party(): void
+    {
+        PoliticalParty::truncate();
+
+        $mock_political_party_data = $this->getPoliticalPartyMockData();
+
+        $response = $this->withHeader('Authorization', 'Bearer ' . $this->getToken())
+            ->json('POST', self::ENDPOINT, $mock_political_party_data);
+
+        $response->assertStatus(200);
+        $response->assertJsonPath('data.id', $mock_political_party_data['id']);
+        $response->assertJsonPath('data.political_position_id', $mock_political_party_data['political_position_id']);
+        $response->assertJsonPath('data.name', $mock_political_party_data['name']);
+        $response->assertJsonPath('data.description', $mock_political_party_data['description']);
     }
 }

@@ -6,7 +6,7 @@ namespace Tests\Feature\Http\Controllers\api\v1;
 use Illuminate\Support\Facades\Artisan;
 use Tests\TestCase;
 
-class ApiTest extends TestCase
+class TestApi extends TestCase
 {
     /**
      * Flag to know if the migration has ran
