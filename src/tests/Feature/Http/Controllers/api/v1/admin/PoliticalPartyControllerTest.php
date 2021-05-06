@@ -4,9 +4,8 @@
 namespace Tests\Feature\Http\Controllers\api\v1\admin;
 
 use App\Models\PoliticalParty;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Str;
-use Tests\TestCase;
+use Tests\Feature\Http\Controllers\api\v1\ApiTest;
 
 /**
  * Class PoliticalPartyControllerTest
@@ -16,22 +15,18 @@ use Tests\TestCase;
  *
  * @package Tests\Unit\Controllers\api\v1\admin
  */
-class PoliticalPartyControllerTest extends TestCase
+class PoliticalPartyControllerTest extends ApiTest
 {
+    /**
+     * Political party api endpoint
+     */
     const ENDPOINT = '/api/v1/admin/political-party';
 
-    private function getToken(): string
-    {
-        $response = $this->json('post', '/api/v1/auth/get_token', [
-                'email' => 'hoydigo.com@gmail.com',
-                'password' => 'qwerty123',
-            ]);
-
-        $response_content = json_decode($response->getContent());
-
-        return $response_content->access_token;
-    }
-
+    /**
+     * Returns array with a political party mock data
+     *
+     * @return array
+     */
     public function getPoliticalPartyMockData(): array
     {
         $political_positions = ['DEX', 'DER', 'DCE', 'CEN', 'ICE', 'IZQ', 'IEX'];
@@ -44,17 +39,6 @@ class PoliticalPartyControllerTest extends TestCase
         ];
     }
 
-    public function setUp(): void
-    {
-        parent::setUp();
-
-        Artisan::call('migrate:fresh');
-        Artisan::call(
-            'db:seed', ['--class' => 'DatabaseSeeder']
-        );
-        Artisan::call('passport:install');
-    }
-
     /**
      * @test
      *
@@ -62,7 +46,7 @@ class PoliticalPartyControllerTest extends TestCase
      */
     public function user_can_list_political_parties(): void
     {
-        $this->withoutExceptionHandling();
+        PoliticalParty::truncate();
 
         $mock_political_parties = [
             $this->getPoliticalPartyMockData(),
