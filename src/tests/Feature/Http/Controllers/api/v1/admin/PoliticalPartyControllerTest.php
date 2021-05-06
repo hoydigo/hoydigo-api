@@ -89,4 +89,79 @@ class PoliticalPartyControllerTest extends TestApi
         $response->assertJsonPath('data.name', $mock_political_party_data['name']);
         $response->assertJsonPath('data.description', $mock_political_party_data['description']);
     }
+
+    /**
+     * @test
+     *
+     * @return void
+     */
+    public function user_get_a_specific_political_party(): void
+    {
+        PoliticalParty::truncate();
+
+        $mock_political_party_data = $this->getPoliticalPartyMockData();
+        PoliticalParty::create($mock_political_party_data);
+
+        $response = $this->withHeader('Authorization', 'Bearer ' . $this->getToken())
+            ->json('GET', self::ENDPOINT . '/' . $mock_political_party_data['id']);
+
+        $response->assertStatus(200);
+        $response->assertJsonPath('data.id', $mock_political_party_data['id']);
+        $response->assertJsonPath('data.political_position.id', $mock_political_party_data['political_position_id']);
+        $response->assertJsonPath('data.name', $mock_political_party_data['name']);
+        $response->assertJsonPath('data.description', $mock_political_party_data['description']);
+    }
+
+    /**
+     * @test
+     *
+     * @return void
+     */
+    public function user_can_update_a_specific_political_party(): void
+    {
+        PoliticalParty::truncate();
+
+        $mock_political_party_data = $this->getPoliticalPartyMockData();
+        $mock_political_party_data_updated = $this->getPoliticalPartyMockData();
+        unset($mock_political_party_data_updated['id']);
+
+        PoliticalParty::create($mock_political_party_data);
+
+        $response = $this->withHeader('Authorization', 'Bearer ' . $this->getToken())
+            ->json('PATCH', self::ENDPOINT . '/' . $mock_political_party_data['id'], $mock_political_party_data_updated);
+
+        $response->assertStatus(200);
+        $response->assertJsonPath('data.id', $mock_political_party_data['id']);
+        $response->assertJsonPath('data.political_position.id', $mock_political_party_data_updated['political_position_id']);
+        $response->assertJsonPath('data.name', $mock_political_party_data_updated['name']);
+        $response->assertJsonPath('data.description', $mock_political_party_data_updated['description']);
+    }
+
+    /**
+     * @test
+     *
+     * @return void
+     */
+    public function user_can_delete_a_specific_political_party(): void
+    {
+        PoliticalParty::truncate();
+        $token = $this->getToken();
+
+        $mock_political_party_data = $this->getPoliticalPartyMockData();
+        $mock_political_party_data_updated = $this->getPoliticalPartyMockData();
+        unset($mock_political_party_data_updated['id']);
+
+        PoliticalParty::create($mock_political_party_data);
+
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)
+            ->json('DELETE', self::ENDPOINT . '/' . $mock_political_party_data['id']);
+
+        $response->assertStatus(204);
+
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)
+            ->json('DELETE', self::ENDPOINT . '/' . $mock_political_party_data['id']);
+
+        $response->assertStatus(404);
+        $response->assertJsonPath('message', 'Political party not found');
+    }
 }
