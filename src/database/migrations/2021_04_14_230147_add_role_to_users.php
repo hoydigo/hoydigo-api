@@ -15,7 +15,7 @@ class AddRoleToUsers extends Migration
     {
         if (!Schema::hasColumn('users', 'role')) {
             Schema::table('users', function (Blueprint $table) {
-                $table->string('role')->after('id');
+                $table->string('role')->nullable()->after('id');
             });
         }
     }

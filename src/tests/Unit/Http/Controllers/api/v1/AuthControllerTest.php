@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Controllers\api\v1;
+namespace Tests\Unit\Http\Controllers\api\v1;
 
 use App\Http\Controllers\api\v1\AuthController;
 use App\Models\User;
@@ -16,7 +16,7 @@ use Tests\TestCase;
  * Class LoginController
  *
  * Run these specific tests
- * php artisan test tests/Unit/Controllers/api/v1/AuthControllerTest.php
+ * php artisan test tests/Unit/Http/Controllers/api/v1/AuthControllerTest.php
  *
  * @package Tests\Unit\Controllers\api\v1
  */
