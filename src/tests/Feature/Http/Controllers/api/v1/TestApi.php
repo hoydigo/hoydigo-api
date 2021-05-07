@@ -9,13 +9,6 @@ use Tests\TestCase;
 class TestApi extends TestCase
 {
     /**
-     * Flag to know if the migration has ran
-     *
-     * @var bool
-     */
-    protected static $migration_loaded = false;
-
-    /**
      * Get api token
      *
      * @return string
@@ -41,11 +34,9 @@ class TestApi extends TestCase
     {
         parent::setUp();
 
-        if (!static::$migration_loaded) {
-            Artisan::call('migrate');
-            Artisan::call('db:seed', ['--class' => 'DatabaseSeeder']);
-            Artisan::call('passport:install');
-        }
+        Artisan::call('migrate');
+        Artisan::call('db:seed', ['--class' => 'DatabaseSeeder']);
+        Artisan::call('passport:install');
     }
 
 }

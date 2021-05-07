@@ -4,6 +4,7 @@
 namespace Tests\Feature\Http\Controllers\api\v1\admin;
 
 use App\Models\PoliticalParty;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Str;
 use Tests\Feature\Http\Controllers\api\v1\TestApi;
 
@@ -72,6 +73,27 @@ class PoliticalPartyControllerTest extends TestApi
     /**
      * @test
      *
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
+     *
+     * @return void
+     */
+    public function user_get_exception_trying_to_list_political_parties(): void
+    {
+        $client_mock = \Mockery::mock('overload:App\Models\PoliticalParty');
+        $client_mock->shouldReceive('orderBy')->andThrow(new \Exception('Exception test'));
+        App::instance('\App\Models\PoliticalParty', $client_mock);
+
+        $response = $this->withHeader('Authorization', 'Bearer ' . $this->getToken())
+            ->json('GET', self::ENDPOINT);
+
+        $response->assertStatus(500);
+        $response->assertJsonPath('message', 'Exception test');
+    }
+
+    /**
+     * @test
+     *
      * @return void
      */
     public function user_can_store_a_new_political_party(): void
@@ -88,6 +110,29 @@ class PoliticalPartyControllerTest extends TestApi
         $response->assertJsonPath('data.political_position_id', $mock_political_party_data['political_position_id']);
         $response->assertJsonPath('data.name', $mock_political_party_data['name']);
         $response->assertJsonPath('data.description', $mock_political_party_data['description']);
+    }
+
+    /**
+     * @test
+     *
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
+     *
+     * @return void
+     */
+    public function user_get_exception_trying_to_store_a_new_political_party(): void
+    {
+        $client_mock = \Mockery::mock('overload:App\Models\PoliticalParty');
+        $client_mock->shouldReceive('create')->andThrow(new \Exception('Exception test'));
+        App::instance('\App\Models\PoliticalParty', $client_mock);
+
+        $mock_political_party_data = $this->getPoliticalPartyMockData();
+
+        $response = $this->withHeader('Authorization', 'Bearer ' . $this->getToken())
+            ->json('POST', self::ENDPOINT, $mock_political_party_data);
+
+        $response->assertStatus(500);
+        $response->assertJsonPath('message', 'Exception test');
     }
 
     /**
@@ -110,6 +155,43 @@ class PoliticalPartyControllerTest extends TestApi
         $response->assertJsonPath('data.political_position.id', $mock_political_party_data['political_position_id']);
         $response->assertJsonPath('data.name', $mock_political_party_data['name']);
         $response->assertJsonPath('data.description', $mock_political_party_data['description']);
+    }
+
+    /**
+     * @test
+     *
+     * @return void
+     */
+    public function user_try_to_get_a_political_party_that_does_not_exist(): void
+    {
+        PoliticalParty::truncate();
+
+        $response = $this->withHeader('Authorization', 'Bearer ' . $this->getToken())
+            ->json('GET', self::ENDPOINT . '/WROID');
+
+        $response->assertStatus(404);
+        $response->assertJsonPath('message', 'Political party not found');
+    }
+
+    /**
+     * @test
+     *
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
+     *
+     * @return void
+     */
+    public function user_get_exception_trying_to_get_a_political_party(): void
+    {
+        $client_mock = \Mockery::mock('overload:App\Models\PoliticalParty');
+        $client_mock->shouldReceive('find')->andThrow(new \Exception('Exception test'));
+        App::instance('\App\Models\PoliticalParty', $client_mock);
+
+        $response = $this->withHeader('Authorization', 'Bearer ' . $this->getToken())
+            ->json('GET', self::ENDPOINT . '/WROID');
+
+        $response->assertStatus(500);
+        $response->assertJsonPath('message', 'Exception test');
     }
 
     /**
@@ -142,6 +224,46 @@ class PoliticalPartyControllerTest extends TestApi
      *
      * @return void
      */
+    public function user_try_to_update_a_political_party_that_does_not_exist(): void
+    {
+        PoliticalParty::truncate();
+        $mock_political_party_data_updated = $this->getPoliticalPartyMockData();
+
+        $response = $this->withHeader('Authorization', 'Bearer ' . $this->getToken())
+            ->json('PATCH', self::ENDPOINT . '/WROID', $mock_political_party_data_updated);
+
+        $response->assertStatus(404);
+        $response->assertJsonPath('message', 'Political party not found');
+    }
+
+    /**
+     * @test
+     *
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
+     *
+     * @return void
+     */
+    public function user_get_exception_trying_to_update_a_political_party(): void
+    {
+        $client_mock = \Mockery::mock('overload:App\Models\PoliticalParty');
+        $client_mock->shouldReceive('find')->andThrow(new \Exception('Exception test'));
+        App::instance('\App\Models\PoliticalParty', $client_mock);
+
+        $mock_political_party_data_updated = $this->getPoliticalPartyMockData();
+
+        $response = $this->withHeader('Authorization', 'Bearer ' . $this->getToken())
+            ->json('PATCH', self::ENDPOINT . '/WROID', $mock_political_party_data_updated);
+
+        $response->assertStatus(500);
+        $response->assertJsonPath('message', 'Exception test');
+    }
+
+    /**
+     * @test
+     *
+     * @return void
+     */
     public function user_can_delete_a_specific_political_party(): void
     {
         PoliticalParty::truncate();
@@ -163,5 +285,26 @@ class PoliticalPartyControllerTest extends TestApi
 
         $response->assertStatus(404);
         $response->assertJsonPath('message', 'Political party not found');
+    }
+
+    /**
+     * @test
+     *
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
+     *
+     * @return void
+     */
+    public function user_get_exception_trying_to_delete_a_political_party(): void
+    {
+        $client_mock = \Mockery::mock('overload:App\Models\PoliticalParty');
+        $client_mock->shouldReceive('find')->andThrow(new \Exception('Exception test'));
+        App::instance('\App\Models\PoliticalParty', $client_mock);
+
+        $response = $this->withHeader('Authorization', 'Bearer ' . $this->getToken())
+            ->json('DELETE', self::ENDPOINT . '/ANYID');
+
+        $response->assertStatus(500);
+        $response->assertJsonPath('message', 'Exception test');
     }
 }
