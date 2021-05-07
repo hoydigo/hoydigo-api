@@ -3,6 +3,7 @@
 namespace Tests\Unit\Http\Controllers\api\v1;
 
 use App\Http\Controllers\api\v1\AuthController;
+use App\Http\Requests\RegisterAuthRequest;
 use App\Models\User;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Request;
@@ -89,16 +90,12 @@ class AuthControllerTest extends TestCase
      */
     public function user_registered_successfully(): void
     {
-        $validator_mock = $this->createMock(Validator::class);
-        $validator_mock->method('fails')->willReturn(false);
-        \Illuminate\Support\Facades\Validator::shouldReceive('make')->once()->andReturn($validator_mock);
-
         $client_mock = \Mockery::mock('overload:App\Models\User');
         $client_mock->shouldReceive('create')->andReturn($client_mock);
         App::instance('\App\Models\User', $client_mock);
 
         $controller = new AuthController();
-        $request = Request::create('/api/v1/user/register', 'POST',[
+        $request = RegisterAuthRequest::create('/api/v1/user/register', 'POST',[
             'role'     => 'web-guest',
             'name'     => 'Unit Test 4',
             'email'    => 'unit4.test@email.com',
@@ -109,38 +106,5 @@ class AuthControllerTest extends TestCase
 
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals('User registered successfully', json_decode($response->getContent())->message);
-    }
-
-    /**
-     * @test
-     *
-     * @runInSeparateProcess
-     * @preserveGlobalState disabled
-     *
-     * @return void
-     */
-    public function user_registered_unsuccessfully(): void
-    {
-        $message_errors = $this->createMock(MessageBag::class);
-        $message_errors->method('getMessages')->willReturn(['field1' => 'error1', 'field2' => 'error2']);
-
-        $validator_mock = $this->createMock(Validator::class);
-        $validator_mock->method('fails')->willReturn(true);
-        $validator_mock->method('errors')->willReturn($message_errors);
-        \Illuminate\Support\Facades\Validator::shouldReceive('make')->once()->andReturn($validator_mock);
-
-        $controller = new AuthController();
-        $request = Request::create('/api/v1/user/register', 'POST',[
-            'role'     => 'web-guest',
-            'name'     => 'Unit Test 4',
-            'email'    => 'unit4.test@email.com',
-            'password' => 'test123'
-        ]);
-
-        $response =  $controller->register($request);
-
-        $this->assertEquals(400, $response->getStatusCode());
-        $this->assertEquals('error1', json_decode($response->getContent())->field1);
-        $this->assertEquals('error2', json_decode($response->getContent())->field2);
     }
 }
