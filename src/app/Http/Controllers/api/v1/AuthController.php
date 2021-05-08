@@ -98,7 +98,7 @@ class AuthController extends Controller
      *     security={{ "bearer": {} }},
      *     @OA\RequestBody(
      *      required=true,
-     *      description="Fields dor the new user",
+     *      description="Fields for the new user",
      *      @OA\MediaType(
      *          mediaType="multipart/form-data",
      *          @OA\Schema(

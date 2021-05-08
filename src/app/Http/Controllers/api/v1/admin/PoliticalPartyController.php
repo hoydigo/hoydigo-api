@@ -110,23 +110,7 @@ class PoliticalPartyController extends Controller
      *         response=200,
      *         description="Political party created",
      *         @OA\JsonContent(
-     *              @OA\Property(property="data", type="array", example={"id": "MIPAR", "name": "Mi partido", "description": "Description del partido", "political_position": {"id": "CEN","name": "Centro", "description": "Se conoce por centro ..."}},
-     *                  @OA\Items(
-     *                      @OA\Property(property="id", type="string", format="text", example="CECOL"),
-     *                      @OA\Property(property="name", type="string", format="email", example="Centro Colombia"),
-     *                      @OA\Property(property="description", type="string", format="text", example="Descripcion de centro colombia"),
-     *                      @OA\Property(
-     *                          property="political_position",
-     *                          type="array",
-     *                          example={"id": "CEN","name": "Centro", "description": "Se conoce por centro ..."},
-     *                          @OA\Items(
-     *                              @OA\Property(property="id", type="string", example="CEN"),
-     *                              @OA\Property(property="name", type="string", example="Centro"),
-     *                              @OA\Property(property="description", type="string", example="Se conoce por centro ...")
-     *                          ),
-     *                      ),
-     *                  ),
-     *              ),
+     *              @OA\Property(property="message", type="string", example="Political party created successfully"),
      *         ),
      *     ),
      *     @OA\Response(

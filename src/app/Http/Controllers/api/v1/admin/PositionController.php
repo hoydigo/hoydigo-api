@@ -27,6 +27,60 @@ class PositionController extends Controller
      * @param StorePositionRequest $request
      *
      * @return JsonResponse
+     *
+     * @OA\Post(
+     *     path="/api/v1/admin/position",
+     *     tags={"Admin - Position"},
+     *     summary="Create a new position",
+     *     description="Create a new position",
+     *     operationId="createPosition",
+     *     security={{ "bearer": {} }},
+     *     @OA\RequestBody(
+     *      required=true,
+     *      description="Fields for the new position",
+     *      @OA\MediaType(
+     *          mediaType="application/x-www-form-urlencoded",
+     *          @OA\Schema(
+     *              @OA\Property(property="id", type="string", format="text", example="MYPOS", description="Id for the new position"),
+     *              @OA\Property(property="country_id", type="string", example="COL", description="Country id where the position is"),
+     *              @OA\Property(property="state_id", type="integer", example="5", description="The state id should be in the country indicated"),
+     *              @OA\Property(property="city_id", type="integer", example="1017", description="The city id should be in the state and country indicated"),
+     *              @OA\Property(property="sector", type="string", example="Politico", description="Sector where the position works"),
+     *              @OA\Property(property="name", type="string", example="Senador de la Republica"),
+     *              @OA\Property(property="description", type="string", example="Descripción del cargo de senador"),
+     *          ),
+     *      ),
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Position created",
+     *         @OA\JsonContent(
+     *              @OA\Property(property="message", type="string", example="Position created successfully"),
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthenticated",
+     *         @OA\JsonContent(
+     *              @OA\Property(property="message", type="string", format="text", example="Unauthenticated"),
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response=403,
+     *         description="User without permission to the endpoint",
+     *         @OA\JsonContent(
+     *              @OA\Property(property="message", type="string", format="text", example="Permission denied."),
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Unprocessable Entity",
+     *         @OA\JsonContent(
+     *              @OA\Property(property="message", type="string", example="The given data was invalid."),
+     *              @OA\Property(property="errors", example="{'field':['Error message']}"),
+     *         ),
+     *     ),
+     * )
      */
     public function store(StorePositionRequest $request): JsonResponse
     {
