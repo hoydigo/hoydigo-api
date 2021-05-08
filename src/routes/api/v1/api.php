@@ -27,4 +27,11 @@ Route::prefix('/admin')->group(function () {
     Route::get('/political-party/{political_party_id}', 'App\Http\Controllers\api\v1\admin\PoliticalPartyController@show')->middleware(['auth:api', 'scopes:admin:political-party:get']);
     Route::patch('/political-party/{political_party_id}', 'App\Http\Controllers\api\v1\admin\PoliticalPartyController@update')->middleware(['auth:api', 'scopes:admin:political-party:update']);
     Route::delete('/political-party/{political_party_id}', 'App\Http\Controllers\api\v1\admin\PoliticalPartyController@destroy')->middleware(['auth:api', 'scopes:admin:political-party:delete']);
+
+
+    Route::get('/position', 'App\Http\Controllers\api\v1\admin\PositionController@index')->middleware(['auth:api', 'scopes:admin:position:list']);
+    Route::post('/position', 'App\Http\Controllers\api\v1\admin\PositionController@store')->middleware(['auth:api', 'scopes:admin:position:create']);
+    Route::get('/position/{position_id}', 'App\Http\Controllers\api\v1\admin\PositionController@show')->middleware(['auth:api', 'scopes:admin:position:get']);
+    Route::patch('/position/{position_id}', 'App\Http\Controllers\api\v1\admin\PositionController@update')->middleware(['auth:api', 'scopes:admin:position:update']);
+    Route::delete('/position/{position_id}', 'App\Http\Controllers\api\v1\admin\PositionController@destroy')->middleware(['auth:api', 'scopes:admin:position:delete']);
 });

@@ -35,11 +35,18 @@ class AuthServiceProvider extends ServiceProvider
 
         Passport::tokensCan([
             'auth:register' => 'Register new users',
+
             'admin:political-party:list' => 'List all political parties',
             'admin:political-party:create' => 'Create a new political party',
             'admin:political-party:get' => 'Get a specific political party',
             'admin:political-party:update' => 'Update a specific political party',
             'admin:political-party:delete' => 'Delete a specific political party',
+
+            'admin:position:list' => 'List all available positions',
+            'admin:position:create' => 'Create a new position',
+            'admin:position:get' => 'Get a specific position',
+            'admin:position:update' => 'Update a specific position',
+            'admin:position:delete' => 'Delete a specific position',
         ]);
 
         Passport::setDefaultScope([]);

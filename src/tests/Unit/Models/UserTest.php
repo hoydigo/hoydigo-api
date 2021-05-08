@@ -49,11 +49,18 @@ class UserTest extends TestCase
         $this->assertEquals(
             [
                 'auth:register',
+
                 'admin:political-party:list',
                 'admin:political-party:create',
                 'admin:political-party:get',
                 'admin:political-party:update',
                 'admin:political-party:delete',
+
+                'admin:position:list',
+                'admin:position:create',
+                'admin:position:get',
+                'admin:position:update',
+                'admin:position:delete',
             ],
             $user->getScopes()
         );
