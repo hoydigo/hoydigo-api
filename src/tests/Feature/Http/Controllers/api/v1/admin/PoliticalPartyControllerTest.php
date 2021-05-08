@@ -21,7 +21,7 @@ class PoliticalPartyControllerTest extends TestApi
     /**
      * Political party api endpoint
      */
-    const ENDPOINT = '/api/v1/admin/political-party';
+    const ENDPOINT_ADMIN_POLITICAL_PARTY = '/api/v1/admin/political-party';
 
     /**
      * Returns array with a political party mock data
@@ -60,7 +60,7 @@ class PoliticalPartyControllerTest extends TestApi
         }
 
         $response = $this->withHeader('Authorization', 'Bearer ' . $this->getToken())
-            ->json('GET', self::ENDPOINT);
+            ->json('GET', self::ENDPOINT_ADMIN_POLITICAL_PARTY);
 
         $response->assertStatus(200);
         $response->assertJsonCount(3, ['data']);
@@ -85,7 +85,7 @@ class PoliticalPartyControllerTest extends TestApi
         App::instance('\App\Models\PoliticalParty', $client_mock);
 
         $response = $this->withHeader('Authorization', 'Bearer ' . $this->getToken())
-            ->json('GET', self::ENDPOINT);
+            ->json('GET', self::ENDPOINT_ADMIN_POLITICAL_PARTY);
 
         $response->assertStatus(500);
         $response->assertJsonPath('message', 'Exception test');
@@ -103,7 +103,7 @@ class PoliticalPartyControllerTest extends TestApi
         $mock_political_party_data = $this->getPoliticalPartyMockData();
 
         $response = $this->withHeader('Authorization', 'Bearer ' . $this->getToken())
-            ->json('POST', self::ENDPOINT, $mock_political_party_data);
+            ->json('POST', self::ENDPOINT_ADMIN_POLITICAL_PARTY, $mock_political_party_data);
 
         $response->assertStatus(200);
         $response->assertJsonPath('message', 'Political party created successfully');
@@ -126,7 +126,7 @@ class PoliticalPartyControllerTest extends TestApi
         $mock_political_party_data = $this->getPoliticalPartyMockData();
 
         $response = $this->withHeader('Authorization', 'Bearer ' . $this->getToken())
-            ->json('POST', self::ENDPOINT, $mock_political_party_data);
+            ->json('POST', self::ENDPOINT_ADMIN_POLITICAL_PARTY, $mock_political_party_data);
 
         $response->assertStatus(500);
         $response->assertJsonPath('message', 'Exception test');
@@ -145,7 +145,7 @@ class PoliticalPartyControllerTest extends TestApi
         PoliticalParty::create($mock_political_party_data);
 
         $response = $this->withHeader('Authorization', 'Bearer ' . $this->getToken())
-            ->json('GET', self::ENDPOINT . '/' . $mock_political_party_data['id']);
+            ->json('GET', self::ENDPOINT_ADMIN_POLITICAL_PARTY . '/' . $mock_political_party_data['id']);
 
         $response->assertStatus(200);
         $response->assertJsonPath('data.id', $mock_political_party_data['id']);
@@ -164,7 +164,7 @@ class PoliticalPartyControllerTest extends TestApi
         PoliticalParty::truncate();
 
         $response = $this->withHeader('Authorization', 'Bearer ' . $this->getToken())
-            ->json('GET', self::ENDPOINT . '/WROID');
+            ->json('GET', self::ENDPOINT_ADMIN_POLITICAL_PARTY . '/WROID');
 
         $response->assertStatus(404);
         $response->assertJsonPath('message', 'Political party not found');
@@ -185,7 +185,7 @@ class PoliticalPartyControllerTest extends TestApi
         App::instance('\App\Models\PoliticalParty', $client_mock);
 
         $response = $this->withHeader('Authorization', 'Bearer ' . $this->getToken())
-            ->json('GET', self::ENDPOINT . '/WROID');
+            ->json('GET', self::ENDPOINT_ADMIN_POLITICAL_PARTY . '/WROID');
 
         $response->assertStatus(500);
         $response->assertJsonPath('message', 'Exception test');
@@ -207,7 +207,7 @@ class PoliticalPartyControllerTest extends TestApi
         PoliticalParty::create($mock_political_party_data);
 
         $response = $this->withHeader('Authorization', 'Bearer ' . $this->getToken())
-            ->json('PATCH', self::ENDPOINT . '/' . $mock_political_party_data['id'], $mock_political_party_data_updated);
+            ->json('PATCH', self::ENDPOINT_ADMIN_POLITICAL_PARTY . '/' . $mock_political_party_data['id'], $mock_political_party_data_updated);
 
         $response->assertStatus(200);
         $response->assertJsonPath('data.id', $mock_political_party_data['id']);
@@ -227,7 +227,7 @@ class PoliticalPartyControllerTest extends TestApi
         $mock_political_party_data_updated = $this->getPoliticalPartyMockData();
 
         $response = $this->withHeader('Authorization', 'Bearer ' . $this->getToken())
-            ->json('PATCH', self::ENDPOINT . '/WROID', $mock_political_party_data_updated);
+            ->json('PATCH', self::ENDPOINT_ADMIN_POLITICAL_PARTY . '/WROID', $mock_political_party_data_updated);
 
         $response->assertStatus(404);
         $response->assertJsonPath('message', 'Political party not found');
@@ -250,7 +250,7 @@ class PoliticalPartyControllerTest extends TestApi
         $mock_political_party_data_updated = $this->getPoliticalPartyMockData();
 
         $response = $this->withHeader('Authorization', 'Bearer ' . $this->getToken())
-            ->json('PATCH', self::ENDPOINT . '/WROID', $mock_political_party_data_updated);
+            ->json('PATCH', self::ENDPOINT_ADMIN_POLITICAL_PARTY . '/WROID', $mock_political_party_data_updated);
 
         $response->assertStatus(500);
         $response->assertJsonPath('message', 'Exception test');
@@ -273,12 +273,12 @@ class PoliticalPartyControllerTest extends TestApi
         PoliticalParty::create($mock_political_party_data);
 
         $response = $this->withHeader('Authorization', 'Bearer ' . $token)
-            ->json('DELETE', self::ENDPOINT . '/' . $mock_political_party_data['id']);
+            ->json('DELETE', self::ENDPOINT_ADMIN_POLITICAL_PARTY . '/' . $mock_political_party_data['id']);
 
         $response->assertStatus(204);
 
         $response = $this->withHeader('Authorization', 'Bearer ' . $token)
-            ->json('DELETE', self::ENDPOINT . '/' . $mock_political_party_data['id']);
+            ->json('DELETE', self::ENDPOINT_ADMIN_POLITICAL_PARTY . '/' . $mock_political_party_data['id']);
 
         $response->assertStatus(404);
         $response->assertJsonPath('message', 'Political party not found');
@@ -299,7 +299,7 @@ class PoliticalPartyControllerTest extends TestApi
         App::instance('\App\Models\PoliticalParty', $client_mock);
 
         $response = $this->withHeader('Authorization', 'Bearer ' . $this->getToken())
-            ->json('DELETE', self::ENDPOINT . '/ANYID');
+            ->json('DELETE', self::ENDPOINT_ADMIN_POLITICAL_PARTY . '/ANYID');
 
         $response->assertStatus(500);
         $response->assertJsonPath('message', 'Exception test');
