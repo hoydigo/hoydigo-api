@@ -14,8 +14,8 @@ class InfluencerPosition extends Migration
     public function up()
     {
         Schema::create('influencer_position', function (Blueprint $table) {
-            $table->foreignId('influencer_id')->constrained();
-            $table->foreignId('position_id')->constrained();
+            $table->foreignId('influencer_id');
+            $table->foreignId('position_id');
             $table->timestamps();
         });
     }

@@ -163,13 +163,7 @@ class PoliticalPartyController extends Controller
                 'description'           => $request->description,
             ]);
 
-            return response()->json(
-                [
-                    'message' => 'User registered successfully',
-                    'data'    => $political_party->toArray(),
-                ],
-                200
-            );
+            return response()->json(['message' => 'Political party created successfully'], 200);
 
         } catch (\Throwable $e) {
             return response()->json(['message' => $e->getMessage()], 500);

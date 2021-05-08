@@ -10,6 +10,23 @@ class Position extends Model
     use HasFactory;
 
     /**
+     * Indicates key doesn't increment
+     *
+     * For this model the key is string
+     *
+     * @var bool
+     */
+    public $incrementing = false;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = ['id', 'country_id', 'state_id', 'city_id', 'sector', 'name', 'description'];
+
+
+    /**
      * Positions that the influencer has
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany

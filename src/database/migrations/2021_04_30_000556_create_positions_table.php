@@ -16,8 +16,8 @@ class CreatePositionsTable extends Migration
         Schema::create('positions', function (Blueprint $table) {
             $table->string('id', 6)->unique();
             $table->string('country_id', 3);
-            $table->integer('state_id');
-            $table->integer('city_id');
+            $table->integer('state_id')->nullable();
+            $table->integer('city_id')->nullable();
             $table->string('sector', 100);
             $table->string('name', 100);
             $table->string('description', 280);

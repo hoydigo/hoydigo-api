@@ -106,10 +106,7 @@ class PoliticalPartyControllerTest extends TestApi
             ->json('POST', self::ENDPOINT, $mock_political_party_data);
 
         $response->assertStatus(200);
-        $response->assertJsonPath('data.id', $mock_political_party_data['id']);
-        $response->assertJsonPath('data.political_position_id', $mock_political_party_data['political_position_id']);
-        $response->assertJsonPath('data.name', $mock_political_party_data['name']);
-        $response->assertJsonPath('data.description', $mock_political_party_data['description']);
+        $response->assertJsonPath('message', 'Political party created successfully');
     }
 
     /**
