@@ -77,6 +77,27 @@ class PositionControllerTest extends TestApi
     /**
      * @test
      *
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
+     *
+     * @return void
+     */
+    public function user_get_exception_trying_to_list_positions(): void
+    {
+        $client_mock = \Mockery::mock('overload:App\Models\Position');
+        $client_mock->shouldReceive('orderBy')->andThrow(new \Exception('Exception test'));
+        App::instance('\App\Models\Position', $client_mock);
+
+        $response = $this->withHeader('Authorization', 'Bearer ' . $this->getToken())
+            ->json('GET', self::ENDPOINT_ADMIN_POSITION);
+
+        $response->assertStatus(500);
+        $response->assertJsonPath('message', 'Exception test');
+    }
+
+    /**
+     * @test
+     *
      * @return void
      */
     public function user_can_store_a_new_position(): void
