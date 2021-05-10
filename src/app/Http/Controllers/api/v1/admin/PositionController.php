@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api\v1\admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\admin\StorePositionRequest;
 use App\Http\Resources\admin\PositionCollection;
+use App\Http\Resources\admin\PositionResource;
 use App\Models\Position;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -175,15 +176,95 @@ class PositionController extends Controller
     }
 
     /**
+     * Return a specific position
+     *
      * @param Request $request
      * @param string $position_id
      *
      * @return JsonResponse
+     *
+     * @OA\Get(
+     *     path="/api/v1/admin/position/{position_id}",
+     *     tags={"Admin - Position"},
+     *     summary="Get a specific position",
+     *     description="Get a specific position",
+     *     operationId="getPosition",
+     *     security={{ "bearer": {} }},
+     *     @OA\Parameter(name="position_id", in="path", required=true, example="MYPOS1"),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Specific position",
+     *         @OA\JsonContent(
+     *              @OA\Property(property="data", type="array", example={"id": "MYPOS1", "name": "Senador", "description": "Description del cargo de senador", "country": {"id": "COL","name": "Colombia", "continent": "América del Sur"}, "state": {"id": "5","name": "ANTIOQUIA"}, "city": {"id": "1017","name": "Turbo"}},
+     *                  @OA\Items(
+     *                      @OA\Property(property="id", type="string", example="MYPOS1"),
+     *                      @OA\Property(property="name", type="string", example="Senador"),
+     *                      @OA\Property(property="description", type="string", format="text", example="Descripción cargo de senador"),
+     *                      @OA\Property(
+     *                          property="country",
+     *                          type="array",
+     *                          example={"id": "COL","name": "Colombia", "continent": "América del Sur"},
+     *                          @OA\Items(
+     *                              @OA\Property(property="id", type="string", example="COL"),
+     *                              @OA\Property(property="name", type="string", example="Colombia"),
+     *                              @OA\Property(property="continent", type="string", example="América del Sur")
+     *                          ),
+     *                      ),
+     *                      @OA\Property(
+     *                          property="state",
+     *                          type="array",
+     *                          example={"id": "5","name": "ANTIOQUIA"},
+     *                          @OA\Items(
+     *                              @OA\Property(property="id", type="integer", example="5"),
+     *                              @OA\Property(property="name", type="string", example="ANTIOQUIA"),
+     *                          ),
+     *                      ),
+     *                      @OA\Property(
+     *                          property="city",
+     *                          type="array",
+     *                          example={"id": "1017","name": "Turbo"},
+     *                          @OA\Items(
+     *                              @OA\Property(property="id", type="integer", example="1017"),
+     *                              @OA\Property(property="name", type="string", example="Turbo"),
+     *                          ),
+     *                      ),
+     *                  ),
+     *              ),
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthenticated",
+     *         @OA\JsonContent(
+     *              @OA\Property(property="message", type="string", format="text", example="Unauthenticated"),
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response=403,
+     *         description="User without permission to the endpoint",
+     *         @OA\JsonContent(
+     *              @OA\Property(property="message", type="string", format="text", example="Permission denied."),
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Political party not found",
+     *         @OA\JsonContent(
+     *              @OA\Property(property="message", type="string", format="text", example="Position not found"),
+     *         ),
+     *     ),
+     * )
      */
     public function show(Request $request, string $position_id): JsonResponse
     {
         try {
-            return response()->json(['message' => 'Showing'], 200);
+            $position = Position::find($position_id);
+
+            if (is_null($position)) {
+                return response()->json(['message' => 'Position not found'], 404);
+            }
+
+            return (new PositionResource($position))->response()->setStatusCode(200);
 
         } catch (\Throwable $e) {
             return response()->json(['message' => $e->getMessage()], 500);

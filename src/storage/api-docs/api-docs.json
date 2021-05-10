@@ -1232,6 +1232,215 @@
                     }
                 ]
             }
+        },
+        "/api/v1/admin/position/{position_id}": {
+            "get": {
+                "tags": [
+                    "Admin - Position"
+                ],
+                "summary": "Get a specific position",
+                "description": "Get a specific position",
+                "operationId": "getPosition",
+                "parameters": [
+                    {
+                        "name": "position_id",
+                        "in": "path",
+                        "required": true,
+                        "example": "MYPOS1"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Specific position",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "description": "Return a specific position",
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "description": "Return a specific position",
+                                                        "type": "string",
+                                                        "example": "MYPOS1"
+                                                    },
+                                                    "name": {
+                                                        "description": "Return a specific position",
+                                                        "type": "string",
+                                                        "example": "Senador"
+                                                    },
+                                                    "description": {
+                                                        "description": "Return a specific position",
+                                                        "type": "string",
+                                                        "format": "text",
+                                                        "example": "Descripción cargo de senador"
+                                                    },
+                                                    "country": {
+                                                        "description": "Return a specific position",
+                                                        "type": "array",
+                                                        "items": {
+                                                            "properties": {
+                                                                "id": {
+                                                                    "description": "Return a specific position",
+                                                                    "type": "string",
+                                                                    "example": "COL"
+                                                                },
+                                                                "name": {
+                                                                    "description": "Return a specific position",
+                                                                    "type": "string",
+                                                                    "example": "Colombia"
+                                                                },
+                                                                "continent": {
+                                                                    "description": "Return a specific position",
+                                                                    "type": "string",
+                                                                    "example": "América del Sur"
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        },
+                                                        "example": {
+                                                            "id": "COL",
+                                                            "name": "Colombia",
+                                                            "continent": "América del Sur"
+                                                        }
+                                                    },
+                                                    "state": {
+                                                        "description": "Return a specific position",
+                                                        "type": "array",
+                                                        "items": {
+                                                            "properties": {
+                                                                "id": {
+                                                                    "description": "Return a specific position",
+                                                                    "type": "integer",
+                                                                    "example": "5"
+                                                                },
+                                                                "name": {
+                                                                    "description": "Return a specific position",
+                                                                    "type": "string",
+                                                                    "example": "ANTIOQUIA"
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        },
+                                                        "example": {
+                                                            "id": "5",
+                                                            "name": "ANTIOQUIA"
+                                                        }
+                                                    },
+                                                    "city": {
+                                                        "description": "Return a specific position",
+                                                        "type": "array",
+                                                        "items": {
+                                                            "properties": {
+                                                                "id": {
+                                                                    "description": "Return a specific position",
+                                                                    "type": "integer",
+                                                                    "example": "1017"
+                                                                },
+                                                                "name": {
+                                                                    "description": "Return a specific position",
+                                                                    "type": "string",
+                                                                    "example": "Turbo"
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        },
+                                                        "example": {
+                                                            "id": "1017",
+                                                            "name": "Turbo"
+                                                        }
+                                                    }
+                                                },
+                                                "type": "object"
+                                            },
+                                            "example": {
+                                                "id": "MYPOS1",
+                                                "name": "Senador",
+                                                "description": "Description del cargo de senador",
+                                                "country": {
+                                                    "id": "COL",
+                                                    "name": "Colombia",
+                                                    "continent": "América del Sur"
+                                                },
+                                                "state": {
+                                                    "id": "5",
+                                                    "name": "ANTIOQUIA"
+                                                },
+                                                "city": {
+                                                    "id": "1017",
+                                                    "name": "Turbo"
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "Return a specific position",
+                                            "type": "string",
+                                            "format": "text",
+                                            "example": "Unauthenticated"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "User without permission to the endpoint",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "Return a specific position",
+                                            "type": "string",
+                                            "format": "text",
+                                            "example": "Permission denied."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Political party not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "Return a specific position",
+                                            "type": "string",
+                                            "format": "text",
+                                            "example": "Position not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
         }
     },
     "components": {

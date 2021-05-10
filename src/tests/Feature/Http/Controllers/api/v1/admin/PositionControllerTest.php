@@ -69,8 +69,8 @@ class PositionControllerTest extends TestApi
         $response->assertSee($mock_positions[1]['name']);
         $response->assertSee($mock_positions[2]['description']);
         $response->assertJsonPath('data.0.country.name', 'Colombia');
-        $response->assertJsonPath('data.0.state.name', 'ANTIOQUIA');
-        $response->assertJsonPath('data.0.city.name', 'Turbo');
+        $response->assertJsonPath('data.0.state.id', 5);
+        $response->assertJsonPath('data.0.city.id', 1017);
         $response->assertJsonCount(4, ['links']);
     }
 
@@ -131,6 +131,67 @@ class PositionControllerTest extends TestApi
 
         $response = $this->withHeader('Authorization', 'Bearer ' . $this->getToken())
             ->json('POST', self::ENDPOINT_ADMIN_POSITION, $mock_position_data);
+
+        $response->assertStatus(500);
+        $response->assertJsonPath('message', 'Exception test');
+    }
+
+    /**
+     * @test
+     *
+     * @return void
+     */
+    public function user_get_a_specific_position(): void
+    {
+        Position::truncate();
+
+        $mock_position_data = $this->getPositionMockData();
+        Position::create($mock_position_data);
+
+        $response = $this->withHeader('Authorization', 'Bearer ' . $this->getToken())
+            ->json('GET', self::ENDPOINT_ADMIN_POSITION . '/' . $mock_position_data['id']);
+
+        $response->assertStatus(200);
+        $response->assertJsonPath('data.id', $mock_position_data['id']);
+        $response->assertJsonPath('data.name', $mock_position_data['name']);
+        $response->assertJsonPath('data.description', $mock_position_data['description']);
+        $response->assertJsonPath('data.country.name', 'Colombia');
+        $response->assertJsonPath('data.state.id', 5);
+        $response->assertJsonPath('data.city.id', 1017);
+    }
+
+    /**
+     * @test
+     *
+     * @return void
+     */
+    public function user_try_to_get_a_position_that_does_not_exist(): void
+    {
+        Position::truncate();
+
+        $response = $this->withHeader('Authorization', 'Bearer ' . $this->getToken())
+            ->json('GET', self::ENDPOINT_ADMIN_POSITION . '/WRONID');
+
+        $response->assertStatus(404);
+        $response->assertJsonPath('message', 'Position not found');
+    }
+
+    /**
+     * @test
+     *
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
+     *
+     * @return void
+     */
+    public function user_get_exception_trying_to_get_a_position(): void
+    {
+        $client_mock = \Mockery::mock('overload:App\Models\Position');
+        $client_mock->shouldReceive('find')->andThrow(new \Exception('Exception test'));
+        App::instance('\App\Models\Position', $client_mock);
+
+        $response = $this->withHeader('Authorization', 'Bearer ' . $this->getToken())
+            ->json('GET', self::ENDPOINT_ADMIN_POSITION . '/WRONID');
 
         $response->assertStatus(500);
         $response->assertJsonPath('message', 'Exception test');
