@@ -25,6 +25,36 @@ class Position extends Model
      */
     protected $fillable = ['id', 'country_id', 'state_id', 'city_id', 'sector', 'name', 'description'];
 
+    /**
+     * Country where the position is
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function country()
+    {
+        return $this->belongsTo(Country::class, 'country_id');
+    }
+
+    /**
+     * State where the position is
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function state()
+    {
+        return $this->belongsTo(State::class, 'state_id');
+    }
+
+    /**
+     * City where the position is
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function city()
+    {
+        return $this->belongsTo(City::class, 'city_id');
+    }
+
 
     /**
      * Positions that the influencer has

@@ -3,7 +3,7 @@
 
 namespace Tests\Feature\Http\Controllers\api\v1\admin;
 
-use App\Models\PoliticalParty;
+use App\Models\Position;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Str;
 use Tests\Feature\Http\Controllers\api\v1\TestApi;
@@ -46,9 +46,42 @@ class PositionControllerTest extends TestApi
      *
      * @return void
      */
+    public function user_can_list_positions(): void
+    {
+        Position::truncate();
+
+        $mock_positions = [
+            $this->getPositionMockData(),
+            $this->getPositionMockData(),
+            $this->getPositionMockData(),
+        ];
+
+        foreach ($mock_positions as $position_data) {
+            Position::create($position_data);
+        }
+
+        $response = $this->withHeader('Authorization', 'Bearer ' . $this->getToken())
+            ->json('GET', self::ENDPOINT_ADMIN_POSITION);
+
+        $response->assertStatus(200);
+        $response->assertJsonCount(3, ['data']);
+        $response->assertSee($mock_positions[0]['id']);
+        $response->assertSee($mock_positions[1]['name']);
+        $response->assertSee($mock_positions[2]['description']);
+        $response->assertJsonPath('data.0.country.name', 'Colombia');
+        $response->assertJsonPath('data.0.state.name', 'ANTIOQUIA');
+        $response->assertJsonPath('data.0.city.name', 'Turbo');
+        $response->assertJsonCount(4, ['links']);
+    }
+
+    /**
+     * @test
+     *
+     * @return void
+     */
     public function user_can_store_a_new_position(): void
     {
-        PoliticalParty::truncate();
+        Position::truncate();
 
         $mock_position = $this->getPositionMockData();
 

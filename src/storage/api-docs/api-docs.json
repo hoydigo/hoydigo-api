@@ -897,6 +897,209 @@
                 ]
             }
         },
+        "/api/v1/admin/position?page=1": {
+            "get": {
+                "tags": [
+                    "Admin - Position"
+                ],
+                "summary": "List of the positions",
+                "description": "List of the positions",
+                "operationId": "listPositions",
+                "responses": {
+                    "200": {
+                        "description": "List of positions",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "description": "Returns all positions\n\nIt is returning the positions in pagination\nthe amount of positions per page is 20.",
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "description": "Returns all positions\n\nIt is returning the positions in pagination\nthe amount of positions per page is 20.",
+                                                        "type": "string",
+                                                        "example": "MYPOS1"
+                                                    },
+                                                    "name": {
+                                                        "description": "Returns all positions\n\nIt is returning the positions in pagination\nthe amount of positions per page is 20.",
+                                                        "type": "string",
+                                                        "example": "Senador"
+                                                    },
+                                                    "description": {
+                                                        "description": "Returns all positions\n\nIt is returning the positions in pagination\nthe amount of positions per page is 20.",
+                                                        "type": "string",
+                                                        "format": "text",
+                                                        "example": "Descripción cargo de senador"
+                                                    },
+                                                    "country": {
+                                                        "description": "Returns all positions\n\nIt is returning the positions in pagination\nthe amount of positions per page is 20.",
+                                                        "type": "array",
+                                                        "items": {
+                                                            "properties": {
+                                                                "id": {
+                                                                    "description": "Returns all positions\n\nIt is returning the positions in pagination\nthe amount of positions per page is 20.",
+                                                                    "type": "string",
+                                                                    "example": "COL"
+                                                                },
+                                                                "name": {
+                                                                    "description": "Returns all positions\n\nIt is returning the positions in pagination\nthe amount of positions per page is 20.",
+                                                                    "type": "string",
+                                                                    "example": "Colombia"
+                                                                },
+                                                                "continent": {
+                                                                    "description": "Returns all positions\n\nIt is returning the positions in pagination\nthe amount of positions per page is 20.",
+                                                                    "type": "string",
+                                                                    "example": "América del Sur"
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        },
+                                                        "example": {
+                                                            "id": "COL",
+                                                            "name": "Colombia",
+                                                            "continent": "América del Sur"
+                                                        }
+                                                    },
+                                                    "state": {
+                                                        "description": "Returns all positions\n\nIt is returning the positions in pagination\nthe amount of positions per page is 20.",
+                                                        "type": "array",
+                                                        "items": {
+                                                            "properties": {
+                                                                "id": {
+                                                                    "description": "Returns all positions\n\nIt is returning the positions in pagination\nthe amount of positions per page is 20.",
+                                                                    "type": "integer",
+                                                                    "example": "5"
+                                                                },
+                                                                "name": {
+                                                                    "description": "Returns all positions\n\nIt is returning the positions in pagination\nthe amount of positions per page is 20.",
+                                                                    "type": "string",
+                                                                    "example": "ANTIOQUIA"
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        },
+                                                        "example": {
+                                                            "id": "5",
+                                                            "name": "ANTIOQUIA"
+                                                        }
+                                                    },
+                                                    "city": {
+                                                        "description": "Returns all positions\n\nIt is returning the positions in pagination\nthe amount of positions per page is 20.",
+                                                        "type": "array",
+                                                        "items": {
+                                                            "properties": {
+                                                                "id": {
+                                                                    "description": "Returns all positions\n\nIt is returning the positions in pagination\nthe amount of positions per page is 20.",
+                                                                    "type": "integer",
+                                                                    "example": "1017"
+                                                                },
+                                                                "name": {
+                                                                    "description": "Returns all positions\n\nIt is returning the positions in pagination\nthe amount of positions per page is 20.",
+                                                                    "type": "string",
+                                                                    "example": "Turbo"
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        },
+                                                        "example": {
+                                                            "id": "1017",
+                                                            "name": "Turbo"
+                                                        }
+                                                    }
+                                                },
+                                                "type": "object"
+                                            },
+                                            "example": [
+                                                {
+                                                    "id": "MYPOS1",
+                                                    "name": "Senador",
+                                                    "description": "Description del cargo de senador",
+                                                    "country": {
+                                                        "id": "COL",
+                                                        "name": "Colombia",
+                                                        "continent": "América del Sur"
+                                                    },
+                                                    "state": {
+                                                        "id": "5",
+                                                        "name": "ANTIOQUIA"
+                                                    },
+                                                    "city": {
+                                                        "id": "1017",
+                                                        "name": "Turbo"
+                                                    }
+                                                },
+                                                {
+                                                    "id": "MYPOS1",
+                                                    "name": "Senador",
+                                                    "description": "Description del cargo de senador",
+                                                    "country": {
+                                                        "id": "COL",
+                                                        "name": "Colombia",
+                                                        "continent": "América del Sur"
+                                                    },
+                                                    "state": {
+                                                        "id": "5",
+                                                        "name": "ANTIOQUIA"
+                                                    },
+                                                    "city": {
+                                                        "id": "1017",
+                                                        "name": "Turbo"
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "Returns all positions\n\nIt is returning the positions in pagination\nthe amount of positions per page is 20.",
+                                            "type": "string",
+                                            "format": "text",
+                                            "example": "Unauthenticated"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "User without permission to thi endpoint",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "Returns all positions\n\nIt is returning the positions in pagination\nthe amount of positions per page is 20.",
+                                            "type": "string",
+                                            "format": "text",
+                                            "example": "Permission denied."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
         "/api/v1/admin/position": {
             "post": {
                 "tags": [
