@@ -29,6 +29,12 @@ return [
             'admin:position:get',
             'admin:position:update',
             'admin:position:delete',
+
+            'admin:influencer:list',
+            'admin:influencer:create',
+            'admin:influencer:get',
+            'admin:influencer:update',
+            'admin:influencer:delete',
         ]
     ],
 

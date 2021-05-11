@@ -47,6 +47,12 @@ class AuthServiceProvider extends ServiceProvider
             'admin:position:get' => 'Get a specific position',
             'admin:position:update' => 'Update a specific position',
             'admin:position:delete' => 'Delete a specific position',
+
+            'admin:influencer:list' => 'List all available influencers',
+            'admin:influencer:create' => 'Create a new influencer',
+            'admin:influencer:get' => 'Get a specific influencer',
+            'admin:influencer:update' => 'Update a specific influencer',
+            'admin:influencer:delete' => 'Delete a specific influencer',
         ]);
 
         Passport::setDefaultScope([]);
