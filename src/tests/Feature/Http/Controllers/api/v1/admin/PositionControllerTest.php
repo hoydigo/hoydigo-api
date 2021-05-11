@@ -197,4 +197,68 @@ class PositionControllerTest extends TestApi
         $response->assertJsonPath('message', 'Exception test');
     }
 
+    /**
+     * @test
+     *
+     * @return void
+     */
+    public function user_can_update_a_specific_position(): void
+    {
+        Position::truncate();
+
+        $mock_position_data = $this->getPositionMockData();
+        $mock_position_data_updated = $this->getPositionMockData();
+        unset($mock_position_data_updated['id']);
+
+        Position::create($mock_position_data);
+
+        $response = $this->withHeader('Authorization', 'Bearer ' . $this->getToken())
+            ->json('PATCH', self::ENDPOINT_ADMIN_POSITION . '/' . $mock_position_data['id'], $mock_position_data_updated);
+
+        $response->assertStatus(200);
+        $response->assertJsonPath('data.id', $mock_position_data['id']);
+        $response->assertJsonPath('data.name', $mock_position_data_updated['name']);
+        $response->assertJsonPath('data.description', $mock_position_data_updated['description']);
+    }
+
+    /**
+     * @test
+     *
+     * @return void
+     */
+    public function user_try_to_update_a_position_that_does_not_exist(): void
+    {
+        Position::truncate();
+        $mock_position_data_updated = $this->getPositionMockData();
+
+        $response = $this->withHeader('Authorization', 'Bearer ' . $this->getToken())
+            ->json('PATCH', self::ENDPOINT_ADMIN_POSITION . '/WRONID', $mock_position_data_updated);
+
+        $response->assertStatus(404);
+        $response->assertJsonPath('message', 'Position not found');
+    }
+
+    /**
+     * @test
+     *
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
+     *
+     * @return void
+     */
+    public function user_get_exception_trying_to_update_a_position(): void
+    {
+        $client_mock = \Mockery::mock('overload:App\Models\Position');
+        $client_mock->shouldReceive('find')->andThrow(new \Exception('Exception test'));
+        App::instance('\App\Models\Position', $client_mock);
+
+        $mock_position_data_updated = $this->getPositionMockData();
+
+        $response = $this->withHeader('Authorization', 'Bearer ' . $this->getToken())
+            ->json('PATCH', self::ENDPOINT_ADMIN_POSITION . '/WRONID', $mock_position_data_updated);
+
+        $response->assertStatus(500);
+        $response->assertJsonPath('message', 'Exception test');
+    }
+
 }
