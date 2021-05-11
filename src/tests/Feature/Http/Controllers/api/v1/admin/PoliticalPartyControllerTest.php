@@ -267,9 +267,6 @@ class PoliticalPartyControllerTest extends TestApi
         $token = $this->getToken();
 
         $mock_political_party_data = $this->getPoliticalPartyMockData();
-        $mock_political_party_data_updated = $this->getPoliticalPartyMockData();
-        unset($mock_political_party_data_updated['id']);
-
         PoliticalParty::create($mock_political_party_data);
 
         $response = $this->withHeader('Authorization', 'Bearer ' . $token)

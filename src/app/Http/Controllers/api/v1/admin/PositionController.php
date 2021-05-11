@@ -403,11 +403,51 @@ class PositionController extends Controller
      * @param string $position_id
      *
      * @return JsonResponse
+     *
+     * @OA\Delete(
+     *     path="/api/v1/admin/position/{position_id}",
+     *     tags={"Admin - Position"},
+     *     summary="Delete a specific position",
+     *     description="Delete a specific position",
+     *     operationId="deletePosition",
+     *     security={{ "bearer": {} }},
+     *     @OA\Parameter(name="position_id", in="path", required=true, example="MYPOS2"),
+     *     @OA\Response(response=204, description="null"),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthenticated",
+     *         @OA\JsonContent(
+     *              @OA\Property(property="message", type="string", format="text", example="Unauthenticated"),
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response=403,
+     *         description="User without permission to the endpoint",
+     *         @OA\JsonContent(
+     *              @OA\Property(property="message", type="string", format="text", example="Permission denied."),
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Political party not found",
+     *         @OA\JsonContent(
+     *              @OA\Property(property="message", type="string", format="text", example="Position not found"),
+     *         ),
+     *     ),
+     * )
      */
     public function destroy(Request $request, string $position_id): JsonResponse
     {
         try {
-            return response()->json(['message' => 'Deleting'], 200);
+            $position = Position::find($position_id);
+
+            if (is_null($position)) {
+                return response()->json(['message' => 'Position not found'], 404);
+            }
+
+            $position->delete();
+
+            return response()->json(null, 204);
 
         } catch (\Throwable $e) {
             return response()->json(['message' => $e->getMessage()], 500);
