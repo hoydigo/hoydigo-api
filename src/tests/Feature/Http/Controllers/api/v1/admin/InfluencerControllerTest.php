@@ -31,6 +31,7 @@ class InfluencerControllerTest extends TestApi
     public function getInfluencerMockData(): array
     {
         return [
+            'country_id'            => 'COL',
             'political_position_id' => 'CEN',
             'political_party_id'    => null,
             'name'                  => Str::random(10),

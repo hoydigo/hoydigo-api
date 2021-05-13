@@ -7,6 +7,7 @@ use App\Http\Requests\admin\StoreInfluencerRequest;
 use App\Models\Influencer;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Config;
 
 class InfluencerController extends Controller
 {
@@ -91,6 +92,7 @@ class InfluencerController extends Controller
     {
         try {
             $influencer = Influencer::create([
+                'country_id'            => $request->country_id,
                 'political_position_id' => $request->political_position_id,
                 'political_party_id'    => $request->political_party_id ?? null,
                 'name'                  => $request->name,
@@ -100,6 +102,7 @@ class InfluencerController extends Controller
                 'twitter_description'   => $request->twitter_description ?? null,
                 'twitter_url'           => $request->twitter_url ?? null,
                 'twitter_verified'      => $request->twitter_verified ?? null,
+                'status'                => Config::get('influencer.status.pending'),
             ]);
 
             return response()->json(['message' => 'Influencer ' . $influencer->name . ' created successfully'], 200);

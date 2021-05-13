@@ -15,6 +15,7 @@ class Influencer extends Model
      * @var array
      */
     protected $fillable = [
+        'country_id',
         'political_position_id',
         'political_party_id',
         'name',
@@ -23,7 +24,8 @@ class Influencer extends Model
         'twitter_username',
         'twitter_description',
         'twitter_url',
-        'twitter_verified'
+        'twitter_verified',
+        'status',
     ];
 
     /**

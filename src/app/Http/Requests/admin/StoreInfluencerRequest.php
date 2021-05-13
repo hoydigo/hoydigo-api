@@ -14,6 +14,7 @@ class StoreInfluencerRequest extends FormRequest
     public function rules()
     {
         return [
+            'country_id'            => 'required|string|size:3|exists:countries,id',
             'political_position_id' => 'required|string|size:3|exists:political_positions,id',
             'political_party_id'    => 'nullable|string|size:5|exists:political_parties,id',
             'name'                  => 'required|string',
