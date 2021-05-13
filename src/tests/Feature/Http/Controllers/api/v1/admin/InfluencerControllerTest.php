@@ -35,12 +35,7 @@ class InfluencerControllerTest extends TestApi
             'political_position_id' => 'CEN',
             'political_party_id'    => null,
             'name'                  => Str::random(10),
-            'image'                 => null,
-            'twitter_id'            => null,
             'twitter_username'      => Str::random(10),
-            'twitter_description'   => null,
-            'twitter_url'           => null,
-            'twitter_verified'      => null,
             'status'                => 'PENDING',
         ];
     }
@@ -164,7 +159,7 @@ class InfluencerControllerTest extends TestApi
      *
      * @return void
      */
-    public function user_try_to_get_a_influencer_that_does_not_exist(): void
+    public function user_try_to_get_an_influencer_that_does_not_exist(): void
     {
         Influencer::truncate();
 
@@ -183,7 +178,7 @@ class InfluencerControllerTest extends TestApi
      *
      * @return void
      */
-    public function user_get_exception_trying_to_get_a_influencer(): void
+    public function user_get_exception_trying_to_get_an_influencer(): void
     {
         $client_mock = \Mockery::mock('overload:App\Models\Influencer');
         $client_mock->shouldReceive('find')->andThrow(new \Exception('Exception test'));
@@ -191,6 +186,72 @@ class InfluencerControllerTest extends TestApi
 
         $response = $this->withHeader('Authorization', 'Bearer ' . $this->getToken())
             ->json('GET', self::ENDPOINT_ADMIN_INFLUENCER . '/1');
+
+        $response->assertStatus(500);
+        $response->assertJsonPath('message', 'Exception test');
+    }
+
+    /**
+     * @test
+     *
+     * @return void
+     */
+    public function user_can_update_a_specific_influencer(): void
+    {
+        Influencer::truncate();
+
+        $mock_influencer_data = $this->getInfluencerMockData();
+        $mock_influencer_data_updated = $this->getInfluencerMockData();
+        unset($mock_influencer_data_updated['political_party_id']);
+
+        Influencer::create($mock_influencer_data);
+
+        $response = $this->withHeader('Authorization', 'Bearer ' . $this->getToken())
+            ->json('PATCH', self::ENDPOINT_ADMIN_INFLUENCER . '/1', $mock_influencer_data_updated);
+
+        $response->assertStatus(200);
+        $response->assertJsonPath('data.id', 1);
+        $response->assertJsonPath('data.name', $mock_influencer_data_updated['name']);
+        $response->assertJsonPath('data.twitter_username', $mock_influencer_data_updated['twitter_username']);
+    }
+
+    /**
+     * @test
+     *
+     * @return void
+     */
+    public function user_try_to_update_an_influencer_that_does_not_exist(): void
+    {
+        Influencer::truncate();
+        $mock_influencer_data_updated = $this->getInfluencerMockData();
+        unset($mock_influencer_data_updated['political_party_id']);
+
+        $response = $this->withHeader('Authorization', 'Bearer ' . $this->getToken())
+            ->json('PATCH', self::ENDPOINT_ADMIN_INFLUENCER . '/-1', $mock_influencer_data_updated);
+
+        $response->assertStatus(404);
+        $response->assertJsonPath('message', 'Influencer not found');
+    }
+
+    /**
+     * @test
+     *
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
+     *
+     * @return void
+     */
+    public function user_get_exception_trying_to_update_an_influencer(): void
+    {
+        $client_mock = \Mockery::mock('overload:App\Models\Influencer');
+        $client_mock->shouldReceive('find')->andThrow(new \Exception('Exception test'));
+        App::instance('\App\Models\Influencer', $client_mock);
+
+        $mock_influencer_data_updated = $this->getInfluencerMockData();
+        unset($mock_influencer_data_updated['political_party_id']);
+
+        $response = $this->withHeader('Authorization', 'Bearer ' . $this->getToken())
+            ->json('PATCH', self::ENDPOINT_ADMIN_INFLUENCER . '/-1', $mock_influencer_data_updated);
 
         $response->assertStatus(500);
         $response->assertJsonPath('message', 'Exception test');

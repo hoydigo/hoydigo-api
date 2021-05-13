@@ -4,6 +4,7 @@ namespace App\Http\Controllers\api\v1\admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\admin\StoreInfluencerRequest;
+use App\Http\Requests\admin\UpdateInfluencerRequest;
 use App\Http\Resources\admin\InfluencerCollection;
 use App\Http\Resources\admin\InfluencerResource;
 use App\Models\Influencer;
@@ -102,12 +103,7 @@ class InfluencerController extends Controller
                 'political_position_id' => $request->political_position_id,
                 'political_party_id'    => $request->political_party_id ?? null,
                 'name'                  => $request->name,
-                'image'                 => $request->image ?? null,
-                'twitter_id'            => $request->twitter_id ?? null,
                 'twitter_username'      => preg_replace('/^@/', '', $request->twitter_username),
-                'twitter_description'   => $request->twitter_description ?? null,
-                'twitter_url'           => $request->twitter_url ?? null,
-                'twitter_verified'      => $request->twitter_verified ?? null,
                 'status'                => Config::get('influencer.status.pending'),
             ]);
 
@@ -144,15 +140,32 @@ class InfluencerController extends Controller
     }
 
     /**
-     * @param Request $request
+     * Update a specific influencer
+     *
+     * @param UpdateInfluencerRequest $request
      * @param string $influencer_id
      *
      * @return JsonResponse
      */
-    public function update(Request $request, string $influencer_id): JsonResponse
+    public function update(UpdateInfluencerRequest $request, string $influencer_id): JsonResponse
     {
         try {
-            return response()->json(['message' => 'Updating'], 200);
+            $influencer = Influencer::find($influencer_id);
+
+            if (is_null($influencer)) {
+                return response()->json(['message' => 'Influencer not found'], 404);
+            }
+
+            $influencer->country_id = $request->country_id ?? $influencer->country_id;
+            $influencer->political_position_id = $request->political_position_id ?? $influencer->political_position_id;
+            $influencer->political_party_id = $request->political_party_id ?? $influencer->political_party_id;
+            $influencer->name = $request->name ?? $influencer->name;
+            $influencer->twitter_username = $request->twitter_username ?? $influencer->twitter_username;
+            $influencer->status = $request->twitter_username ? Config::get('influencer.status.pending') : $influencer->status;
+
+            $influencer->save();
+
+            return (new InfluencerResource($influencer))->response()->setStatusCode(200);
 
         } catch (\Throwable $e) {
             return response()->json(['message' => $e->getMessage()], 500);
