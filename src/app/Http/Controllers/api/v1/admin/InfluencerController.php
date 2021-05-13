@@ -173,6 +173,8 @@ class InfluencerController extends Controller
     }
 
     /**
+     * Delete a influencer by Id
+     *
      * @param Request $request
      * @param string $influencer_id
      *
@@ -181,7 +183,15 @@ class InfluencerController extends Controller
     public function destroy(Request $request, string $influencer_id): JsonResponse
     {
         try {
-            return response()->json(['message' => 'Deleting'], 200);
+            $influencer = Influencer::find($influencer_id);
+
+            if (is_null($influencer)) {
+                return response()->json(['message' => 'Influencer not found'], 404);
+            }
+
+            $influencer->delete();
+
+            return response()->json(null, 204);
 
         } catch (\Throwable $e) {
             return response()->json(['message' => $e->getMessage()], 500);

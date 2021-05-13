@@ -257,4 +257,50 @@ class InfluencerControllerTest extends TestApi
         $response->assertJsonPath('message', 'Exception test');
     }
 
+    /**
+     * @test
+     *
+     * @return void
+     */
+    public function user_can_delete_a_specific_influencer(): void
+    {
+        Influencer::truncate();
+        $token = $this->getToken();
+
+        $mock_influencer_data = $this->getInfluencerMockData();
+        Influencer::create($mock_influencer_data);
+
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)
+            ->json('DELETE', self::ENDPOINT_ADMIN_INFLUENCER . '/1');
+
+        $response->assertStatus(204);
+
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)
+            ->json('DELETE', self::ENDPOINT_ADMIN_INFLUENCER . '/1');
+
+        $response->assertStatus(404);
+        $response->assertJsonPath('message', 'Influencer not found');
+    }
+
+    /**
+     * @test
+     *
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
+     *
+     * @return void
+     */
+    public function user_get_exception_trying_to_delete_an_influencer(): void
+    {
+        $client_mock = \Mockery::mock('overload:App\Models\Influencer');
+        $client_mock->shouldReceive('find')->andThrow(new \Exception('Exception test'));
+        App::instance('\App\Models\Influencer', $client_mock);
+
+        $response = $this->withHeader('Authorization', 'Bearer ' . $this->getToken())
+            ->json('DELETE', self::ENDPOINT_ADMIN_INFLUENCER . '/1');
+
+        $response->assertStatus(500);
+        $response->assertJsonPath('message', 'Exception test');
+    }
+
 }
