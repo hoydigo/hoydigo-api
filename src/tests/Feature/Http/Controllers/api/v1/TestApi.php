@@ -20,6 +20,8 @@ class TestApi extends TestCase
             'password' => 'qwerty123',
         ]);
 
+        print_r($response); die;
+
         $response_content = json_decode($response->getContent());
 
         return $response_content->access_token;
