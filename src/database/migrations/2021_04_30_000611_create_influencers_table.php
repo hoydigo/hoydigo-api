@@ -16,7 +16,7 @@ class CreateInfluencersTable extends Migration
         Schema::create('influencers', function (Blueprint $table) {
             $table->id();
             $table->string('political_position_id', 3);
-            $table->string('political_party_id', 3)->nullable();
+            $table->string('political_party_id', 5)->nullable();
             $table->string('name')->nullable();
             $table->string('image')->nullable();
             $table->string('twitter_id')->nullable();

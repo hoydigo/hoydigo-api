@@ -188,6 +188,156 @@
                 ]
             }
         },
+        "/api/v1/admin/influencer": {
+            "post": {
+                "tags": [
+                    "Admin - Influencer"
+                ],
+                "summary": "Create a new influencer",
+                "description": "Create a new influencer",
+                "operationId": "createInfluencer",
+                "requestBody": {
+                    "description": "Fields for the new influencer",
+                    "required": true,
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "required": [
+                                    "political_position_id",
+                                    "name",
+                                    "twitter_username"
+                                ],
+                                "properties": {
+                                    "political_position_id": {
+                                        "description": "Political position ID",
+                                        "type": "string",
+                                        "format": "text",
+                                        "example": "CEN"
+                                    },
+                                    "political_party_id": {
+                                        "description": "Political party ID",
+                                        "type": "string",
+                                        "example": "MIPAR"
+                                    },
+                                    "name": {
+                                        "description": "Influencer Name",
+                                        "type": "string",
+                                        "example": "Pepito Perez"
+                                    },
+                                    "image": {
+                                        "description": "Path where the image is located",
+                                        "type": "string"
+                                    },
+                                    "twitter_id": {
+                                        "description": "TWITTER ID",
+                                        "type": "string"
+                                    },
+                                    "twitter_username": {
+                                        "description": "TWITTER USERNAME",
+                                        "type": "string",
+                                        "example": "@pepito"
+                                    },
+                                    "twitter_description": {
+                                        "description": "Description on twitter",
+                                        "type": "string"
+                                    },
+                                    "twitter_url": {
+                                        "description": "Influencer twitter url",
+                                        "type": "string"
+                                    },
+                                    "twitter_verified": {
+                                        "description": "Boolean value",
+                                        "type": "boolean"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Influencer created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "Create a new influencer",
+                                            "type": "string",
+                                            "example": "Influencer NAME created successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "Create a new influencer",
+                                            "type": "string",
+                                            "format": "text",
+                                            "example": "Unauthenticated"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "User without permission to the endpoint",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "Create a new influencer",
+                                            "type": "string",
+                                            "format": "text",
+                                            "example": "Permission denied."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "Create a new influencer",
+                                            "type": "string",
+                                            "example": "The given data was invalid."
+                                        },
+                                        "errors": {
+                                            "description": "Create a new influencer",
+                                            "example": "{'field':['Error message']}"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
         "/api/v1/admin/political-party?page=1": {
             "get": {
                 "tags": [
