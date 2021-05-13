@@ -29,6 +29,36 @@ class Influencer extends Model
     ];
 
     /**
+     * Country where the influencer is
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function country()
+    {
+        return $this->belongsTo(Country::class, 'country_id');
+    }
+
+    /**
+     * Political position for the influencer
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function political_position()
+    {
+        return $this->belongsTo(PoliticalPosition::class, 'political_position_id');
+    }
+
+    /**
+     * Political party for the influencer
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function political_party()
+    {
+        return $this->belongsTo(PoliticalParty::class, 'political_party_id');
+    }
+
+    /**
      * Positions that the influencer has
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany

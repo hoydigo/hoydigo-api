@@ -41,7 +41,60 @@ class InfluencerControllerTest extends TestApi
             'twitter_description'   => null,
             'twitter_url'           => null,
             'twitter_verified'      => null,
+            'status'                => 'PENDING',
         ];
+    }
+
+    /**
+     * @test
+     *
+     * @return void
+     */
+    public function user_can_list_influencers(): void
+    {
+        Influencer::truncate();
+
+        $mock_influencers = [
+            $this->getInfluencerMockData(),
+            $this->getInfluencerMockData(),
+            $this->getInfluencerMockData(),
+        ];
+
+        foreach ($mock_influencers as $influencer_data) {
+            Influencer::create($influencer_data);
+        }
+
+        $response = $this->withHeader('Authorization', 'Bearer ' . $this->getToken())
+            ->json('GET', self::ENDPOINT_ADMIN_INFLUENCER);
+
+        $response->assertStatus(200);
+        $response->assertJsonCount(3, ['data']);
+        $response->assertSee($mock_influencers[1]['name']);
+        $response->assertSee($mock_influencers[2]['twitter_username']);
+        $response->assertJsonPath('data.0.country.name', 'Colombia');
+        $response->assertJsonPath('data.0.political_position.name', 'Centro');
+        $response->assertJsonCount(4, ['links']);
+    }
+
+    /**
+     * @test
+     *
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
+     *
+     * @return void
+     */
+    public function user_get_exception_trying_to_list_influencers(): void
+    {
+        $client_mock = \Mockery::mock('overload:App\Models\Influencer');
+        $client_mock->shouldReceive('orderBy')->andThrow(new \Exception('Exception test'));
+        App::instance('\App\Models\Influencer', $client_mock);
+
+        $response = $this->withHeader('Authorization', 'Bearer ' . $this->getToken())
+            ->json('GET', self::ENDPOINT_ADMIN_INFLUENCER);
+
+        $response->assertStatus(500);
+        $response->assertJsonPath('message', 'Exception test');
     }
 
     /**

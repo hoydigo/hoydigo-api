@@ -4,6 +4,7 @@ namespace App\Http\Controllers\api\v1\admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\admin\StoreInfluencerRequest;
+use App\Http\Resources\admin\InfluencerCollection;
 use App\Models\Influencer;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -17,7 +18,9 @@ class InfluencerController extends Controller
     public function index(): JsonResponse
     {
         try {
-            return response()->json(['message' => 'Listing'], 200);
+            $influencers = Influencer::orderBy('name', 'asc')->paginate(20);
+
+            return (new InfluencerCollection($influencers))->response()->setStatusCode(200);
 
         } catch (\Throwable $e) {
             return response()->json(['message' => $e->getMessage()], 500);
