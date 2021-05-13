@@ -30,8 +30,8 @@ jobs:
       env:
         DB_CONNECTION: sqlite
         DB_DATABASE: database/database.sqlite
+        APP_KEY: base64:ZFVuxXwbURJDO7dSN/LIGfvK+8cA7fdXDQtWTF3sOaY=
       run: |
         php artisan migrate --seed --force
-        php artisan key:generate
         php artisan passport:install
         vendor/bin/phpunit tests/
