@@ -138,4 +138,62 @@ class InfluencerControllerTest extends TestApi
         $response->assertJsonPath('message', 'Exception test');
     }
 
+    /**
+     * @test
+     *
+     * @return void
+     */
+    public function user_get_a_specific_influencer(): void
+    {
+        Influencer::truncate();
+
+        $mock_influencer_data = $this->getInfluencerMockData();
+        Influencer::create($mock_influencer_data);
+
+        $response = $this->withHeader('Authorization', 'Bearer ' . $this->getToken())
+            ->json('GET', self::ENDPOINT_ADMIN_INFLUENCER . '/1');
+
+        $response->assertStatus(200);
+        $response->assertJsonPath('data.name', $mock_influencer_data['name']);
+        $response->assertJsonPath('data.country.name', 'Colombia');
+        $response->assertJsonPath('data.political_position.name', 'Centro');
+    }
+
+    /**
+     * @test
+     *
+     * @return void
+     */
+    public function user_try_to_get_a_influencer_that_does_not_exist(): void
+    {
+        Influencer::truncate();
+
+        $response = $this->withHeader('Authorization', 'Bearer ' . $this->getToken())
+            ->json('GET', self::ENDPOINT_ADMIN_INFLUENCER . '/-1');
+
+        $response->assertStatus(404);
+        $response->assertJsonPath('message', 'Influencer not found');
+    }
+
+    /**
+     * @test
+     *
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
+     *
+     * @return void
+     */
+    public function user_get_exception_trying_to_get_a_influencer(): void
+    {
+        $client_mock = \Mockery::mock('overload:App\Models\Influencer');
+        $client_mock->shouldReceive('find')->andThrow(new \Exception('Exception test'));
+        App::instance('\App\Models\Influencer', $client_mock);
+
+        $response = $this->withHeader('Authorization', 'Bearer ' . $this->getToken())
+            ->json('GET', self::ENDPOINT_ADMIN_INFLUENCER . '/1');
+
+        $response->assertStatus(500);
+        $response->assertJsonPath('message', 'Exception test');
+    }
+
 }

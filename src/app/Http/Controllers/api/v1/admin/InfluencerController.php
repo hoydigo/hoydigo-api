@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api\v1\admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\admin\StoreInfluencerRequest;
 use App\Http\Resources\admin\InfluencerCollection;
+use App\Http\Resources\admin\InfluencerResource;
 use App\Models\Influencer;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -13,6 +14,8 @@ use Illuminate\Support\Facades\Config;
 class InfluencerController extends Controller
 {
     /**
+     * List influencers, 20 per page
+     *
      * @return JsonResponse
      */
     public function index(): JsonResponse
@@ -116,6 +119,8 @@ class InfluencerController extends Controller
     }
 
     /**
+     * Return a specific influencer by id
+     *
      * @param Request $request
      * @param string $influencer_id
      *
@@ -124,7 +129,14 @@ class InfluencerController extends Controller
     public function show(Request $request, string $influencer_id): JsonResponse
     {
         try {
-            return response()->json(['message' => 'Showing'], 200);
+
+            $influencer = Influencer::find($influencer_id);
+
+            if (is_null($influencer)) {
+                return response()->json(['message' => 'Influencer not found'], 404);
+            }
+
+            return (new InfluencerResource($influencer))->response()->setStatusCode(200);
 
         } catch (\Throwable $e) {
             return response()->json(['message' => $e->getMessage()], 500);
