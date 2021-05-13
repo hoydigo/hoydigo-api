@@ -22,6 +22,8 @@ class TestApi extends TestCase
 
         $response_content = json_decode($response->getContent());
 
+        print_r($response_content); die;
+
         return $response_content->access_token;
     }
 
