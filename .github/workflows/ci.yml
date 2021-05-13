@@ -30,4 +30,7 @@ jobs:
       env:
         DB_CONNECTION: sqlite
         DB_DATABASE: database/database.sqlite
-      run: vendor/bin/phpunit tests/
+      run: |
+        php artisan migrate --seed
+        php artisan passport:install
+        vendor/bin/phpunit tests/
