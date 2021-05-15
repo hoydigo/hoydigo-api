@@ -1,0 +1,1469 @@
+openapi: 3.0.0
+info:
+  title: hoydigo API
+  version: 1.0.0
+paths:
+  /api/v1/auth/get_token:
+    post:
+      tags:
+        - Auth
+      summary: Get new access token
+      description: Get new access token
+      operationId: getToken
+      requestBody:
+        description: Pass user credentials
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: user1@mail.com
+                password:
+                  type: password
+                  format: password
+                  example: '1234567'
+            examples:
+              example-1:
+                value:
+                  email: user1@mail.com
+                  password: '1234567'
+          application/json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: New token returned
+          content:
+            application/json:
+              schema:
+                required:
+                  - email
+                  - password
+                properties:
+                  name:
+                    type: string
+                    format: text
+                    example: User Name
+                  email:
+                    type: string
+                    format: email
+                    example: user1@mail.com
+                  access_token:
+                    type: string
+                    format: text
+                    example: NEW_ACESS_TOKEN
+                type: object
+              examples:
+                example-1:
+                  value:
+                    name: User Name
+                    email: user1@mail.com
+                    access_token: NEW_ACESS_TOKEN
+        '403':
+          description: Invalid login credentials
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - message
+                x-examples:
+                  example-1:
+                    message: Invalid login credentials.
+              examples:
+                example-1:
+                  value:
+                    message: Invalid login credentials.
+    parameters: []
+  /api/v1/user/register:
+    post:
+      tags:
+        - Auth
+      summary: Register a new user
+      description: Create a new user in the app
+      operationId: registerUser
+      requestBody:
+        description: Fields for the new user
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              properties:
+                name:
+                  description: Register a new user
+                  type: string
+                  format: text
+                  example: User Name
+                email:
+                  description: Register a new user
+                  type: string
+                  format: email
+                  example: user1@mail.com
+                password:
+                  description: Register a new user
+                  type: password
+                  format: password
+                  example: '1234567'
+                role:
+                  description: Register a new user
+                  type: string
+                  format: text
+                  example: web-guest
+              type: object
+      responses:
+        '200':
+          description: New user registered
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    description: Register a new user
+                    type: string
+                    format: text
+                    example: User registered successfully
+                type: object
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                properties:
+                  field1:
+                    description: Register a new user
+                    type: string
+                    format: text
+                    example: Error description
+                  field2:
+                    description: Register a new user
+                    type: string
+                    format: text
+                    example: Error description
+                type: object
+        '401':
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    description: Register a new user
+                    type: string
+                    format: text
+                    example: Unauthenticated
+                type: object
+      security:
+        - bearer: []
+  /api/v1/admin/influencer:
+    post:
+      tags:
+        - Admin - Influencer
+      summary: Create a new influencer
+      description: Create a new influencer
+      operationId: createInfluencer
+      requestBody:
+        description: Fields for the new influencer
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              required:
+                - political_position_id
+                - name
+                - twitter_username
+              properties:
+                political_position_id:
+                  description: Political position ID
+                  type: string
+                  format: text
+                  example: CEN
+                political_party_id:
+                  description: Political party ID
+                  type: string
+                  example: MIPAR
+                name:
+                  description: Influencer Name
+                  type: string
+                  example: Pepito Perez
+                image:
+                  description: Path where the image is located
+                  type: string
+                twitter_id:
+                  description: TWITTER ID
+                  type: string
+                twitter_username:
+                  description: TWITTER USERNAME
+                  type: string
+                  example: '@pepito'
+                twitter_description:
+                  description: Description on twitter
+                  type: string
+                twitter_url:
+                  description: Influencer twitter url
+                  type: string
+                twitter_verified:
+                  description: Boolean value
+                  type: boolean
+              type: object
+      responses:
+        '200':
+          description: Influencer created
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    description: Create a new influencer
+                    type: string
+                    example: Influencer NAME created successfully
+                type: object
+        '401':
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    description: Create a new influencer
+                    type: string
+                    format: text
+                    example: Unauthenticated
+                type: object
+        '403':
+          description: User without permission to the endpoint
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    description: Create a new influencer
+                    type: string
+                    format: text
+                    example: Permission denied.
+                type: object
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    description: Create a new influencer
+                    type: string
+                    example: The given data was invalid.
+                  errors:
+                    description: Create a new influencer
+                    example: '{''field'':[''Error message'']}'
+                type: object
+      security:
+        - bearer: []
+  /api/v1/admin/political-party?page=1:
+    get:
+      tags:
+        - Admin - Political Party
+      summary: List of the political parties
+      description: List of the political parties
+      operationId: listPoliticalParties
+      responses:
+        '200':
+          description: List of political parties
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    description: |-
+                      Returns all political parties
+
+                      It is returning the political parties in pagination
+                      the amount of parties per page is 20.
+                    type: array
+                    items:
+                      properties:
+                        id:
+                          description: |-
+                            Returns all political parties
+
+                            It is returning the political parties in pagination
+                            the amount of parties per page is 20.
+                          type: string
+                          format: text
+                          example: CECOL
+                        name:
+                          description: |-
+                            Returns all political parties
+
+                            It is returning the political parties in pagination
+                            the amount of parties per page is 20.
+                          type: string
+                          format: email
+                          example: Centro Colombia
+                        description:
+                          description: |-
+                            Returns all political parties
+
+                            It is returning the political parties in pagination
+                            the amount of parties per page is 20.
+                          type: string
+                          format: text
+                          example: Descripcion de centro colombia
+                        political_position:
+                          description: |-
+                            Returns all political parties
+
+                            It is returning the political parties in pagination
+                            the amount of parties per page is 20.
+                          type: array
+                          items:
+                            properties:
+                              id:
+                                description: |-
+                                  Returns all political parties
+
+                                  It is returning the political parties in pagination
+                                  the amount of parties per page is 20.
+                                type: string
+                                example: CEN
+                              name:
+                                description: |-
+                                  Returns all political parties
+
+                                  It is returning the political parties in pagination
+                                  the amount of parties per page is 20.
+                                type: string
+                                example: Centro
+                              description:
+                                description: |-
+                                  Returns all political parties
+
+                                  It is returning the political parties in pagination
+                                  the amount of parties per page is 20.
+                                type: string
+                                example: Se conoce por centro ...
+                            type: object
+                          example:
+                            id: CEN
+                            name: Centro
+                            description: Se conoce por centro ...
+                      type: object
+                    example:
+                      - id: MIPA2
+                        name: Mi partido
+                        description: Description del partido
+                        political_position:
+                          id: CEN
+                          name: Centro
+                          description: Se conoce por centro ...
+                      - id: MIPAR
+                        name: Mi partido
+                        description: Description del partido
+                        political_position:
+                          id: CEN
+                          name: Centro
+                          description: Se conoce por centro ...
+                type: object
+        '401':
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    description: |-
+                      Returns all political parties
+
+                      It is returning the political parties in pagination
+                      the amount of parties per page is 20.
+                    type: string
+                    format: text
+                    example: Unauthenticated
+                type: object
+        '403':
+          description: User without permission to thi endpoint
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    description: |-
+                      Returns all political parties
+
+                      It is returning the political parties in pagination
+                      the amount of parties per page is 20.
+                    type: string
+                    format: text
+                    example: Permission denied.
+                type: object
+      security:
+        - bearer: []
+  /api/v1/admin/political-party:
+    post:
+      tags:
+        - Admin - Political Party
+      summary: Create a new political party
+      description: Create a new political party
+      operationId: createPoliticalParty
+      requestBody:
+        description: Fields for the new political party
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              properties:
+                id:
+                  description: Create a new political party
+                  type: string
+                  format: text
+                  example: CECOL
+                political_position_id:
+                  description: Create a new political party
+                  type: string
+                  example: CEN
+                name:
+                  description: Create a new political party
+                  type: string
+                  example: Partido Politico
+                description:
+                  description: Create a new political party
+                  type: string
+                  example: Descripción partido politico
+              type: object
+      responses:
+        '200':
+          description: Political party created
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    description: Create a new political party
+                    type: string
+                    example: Political party created successfully
+                type: object
+        '401':
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    description: Create a new political party
+                    type: string
+                    format: text
+                    example: Unauthenticated
+                type: object
+        '403':
+          description: User without permission to the endpoint
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    description: Create a new political party
+                    type: string
+                    format: text
+                    example: Permission denied.
+                type: object
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    description: Create a new political party
+                    type: string
+                    example: The given data was invalid.
+                  errors:
+                    description: Create a new political party
+                    example: '{''field'':[''Error message'']}'
+                type: object
+      security:
+        - bearer: []
+  '/api/v1/admin/political-party/{political_party_id}':
+    get:
+      tags:
+        - Admin - Political Party
+      summary: Get a specific political party
+      description: Get a specific political party
+      operationId: getPoliticalParty
+      parameters:
+        - name: political_party_id
+          in: path
+          required: true
+          example: CECOL
+      responses:
+        '200':
+          description: Specific political party
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    description: Returns a specific political party
+                    type: array
+                    items:
+                      properties:
+                        id:
+                          description: Returns a specific political party
+                          type: string
+                          format: text
+                          example: CECOL
+                        name:
+                          description: Returns a specific political party
+                          type: string
+                          format: email
+                          example: Centro Colombia
+                        description:
+                          description: Returns a specific political party
+                          type: string
+                          format: text
+                          example: Descripcion de centro colombia
+                        political_position:
+                          description: Returns a specific political party
+                          type: array
+                          items:
+                            properties:
+                              id:
+                                description: Returns a specific political party
+                                type: string
+                                example: CEN
+                              name:
+                                description: Returns a specific political party
+                                type: string
+                                example: Centro
+                              description:
+                                description: Returns a specific political party
+                                type: string
+                                example: Se conoce por centro ...
+                            type: object
+                          example:
+                            id: CEN
+                            name: Centro
+                            description: Se conoce por centro ...
+                      type: object
+                    example:
+                      id: MIPAR
+                      name: Mi partido
+                      description: Description del partido
+                      political_position:
+                        id: CEN
+                        name: Centro
+                        description: Se conoce por centro ...
+                type: object
+        '401':
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    description: Returns a specific political party
+                    type: string
+                    format: text
+                    example: Unauthenticated
+                type: object
+        '403':
+          description: User without permission to the endpoint
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    description: Returns a specific political party
+                    type: string
+                    format: text
+                    example: Permission denied.
+                type: object
+        '404':
+          description: Political party not found
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    description: Returns a specific political party
+                    type: string
+                    format: text
+                    example: Political party not found
+                type: object
+      security:
+        - bearer: []
+    delete:
+      tags:
+        - Admin - Political Party
+      summary: Delete a specific political party
+      description: Delete a specific political party
+      operationId: deletePoliticalParty
+      parameters:
+        - name: political_party_id
+          in: path
+          required: true
+          example: CECOL
+      responses:
+        '204':
+          description: 'null'
+        '401':
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    description: Delete a political party
+                    type: string
+                    format: text
+                    example: Unauthenticated
+                type: object
+        '403':
+          description: User without permission to the endpoint
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    description: Delete a political party
+                    type: string
+                    format: text
+                    example: Permission denied.
+                type: object
+        '404':
+          description: Political party not found
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    description: Delete a political party
+                    type: string
+                    format: text
+                    example: Political party not found
+                type: object
+      security:
+        - bearer: []
+    patch:
+      tags:
+        - Admin - Political Party
+      summary: Update a specific political party
+      description: Update a specific political party
+      operationId: updatePoliticalParty
+      parameters:
+        - name: political_party_id
+          in: path
+          required: true
+          example: CECOL
+      requestBody:
+        description: Fields to update
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              properties:
+                political_position_id:
+                  description: Update a specific political party
+                  type: string
+                  example: CEN
+                name:
+                  description: Update a specific political party
+                  type: string
+                  example: Partido Politico
+                description:
+                  description: Update a specific political party
+                  type: string
+                  example: Descripción partido politico
+              type: object
+      responses:
+        '200':
+          description: Political party updated
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    description: Update a specific political party
+                    type: array
+                    items:
+                      properties:
+                        id:
+                          description: Update a specific political party
+                          type: string
+                          format: text
+                          example: CECOL
+                        name:
+                          description: Update a specific political party
+                          type: string
+                          format: email
+                          example: Centro Colombia
+                        description:
+                          description: Update a specific political party
+                          type: string
+                          format: text
+                          example: Descripcion de centro colombia
+                        political_position:
+                          description: Update a specific political party
+                          type: array
+                          items:
+                            properties:
+                              id:
+                                description: Update a specific political party
+                                type: string
+                                example: CEN
+                              name:
+                                description: Update a specific political party
+                                type: string
+                                example: Centro
+                              description:
+                                description: Update a specific political party
+                                type: string
+                                example: Se conoce por centro ...
+                            type: object
+                          example:
+                            id: CEN
+                            name: Centro
+                            description: Se conoce por centro ...
+                      type: object
+                    example:
+                      id: MIPAR
+                      name: Mi partido
+                      description: Description del partido
+                      political_position:
+                        id: CEN
+                        name: Centro
+                        description: Se conoce por centro ...
+                type: object
+        '401':
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    description: Update a specific political party
+                    type: string
+                    format: text
+                    example: Unauthenticated
+                type: object
+        '403':
+          description: User without permission to the endpoint
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    description: Update a specific political party
+                    type: string
+                    format: text
+                    example: Permission denied.
+                type: object
+        '404':
+          description: Political party not found
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    description: Update a specific political party
+                    type: string
+                    format: text
+                    example: Political party not found
+                type: object
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    description: Update a specific political party
+                    type: string
+                    example: The given data was invalid.
+                  errors:
+                    description: Update a specific political party
+                    example: '{''field'':[''Error message'']}'
+                type: object
+      security:
+        - bearer: []
+  /api/v1/admin/position?page=1:
+    get:
+      tags:
+        - Admin - Position
+      summary: List of the positions
+      description: List of the positions
+      operationId: listPositions
+      responses:
+        '200':
+          description: List of positions
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    description: |-
+                      Returns all positions
+
+                      It is returning the positions in pagination
+                      the amount of positions per page is 20.
+                    type: array
+                    items:
+                      properties:
+                        id:
+                          description: |-
+                            Returns all positions
+
+                            It is returning the positions in pagination
+                            the amount of positions per page is 20.
+                          type: string
+                          example: MYPOS1
+                        name:
+                          description: |-
+                            Returns all positions
+
+                            It is returning the positions in pagination
+                            the amount of positions per page is 20.
+                          type: string
+                          example: Senador
+                        description:
+                          description: |-
+                            Returns all positions
+
+                            It is returning the positions in pagination
+                            the amount of positions per page is 20.
+                          type: string
+                          format: text
+                          example: Descripción cargo de senador
+                        country:
+                          description: |-
+                            Returns all positions
+
+                            It is returning the positions in pagination
+                            the amount of positions per page is 20.
+                          type: array
+                          items:
+                            properties:
+                              id:
+                                description: |-
+                                  Returns all positions
+
+                                  It is returning the positions in pagination
+                                  the amount of positions per page is 20.
+                                type: string
+                                example: COL
+                              name:
+                                description: |-
+                                  Returns all positions
+
+                                  It is returning the positions in pagination
+                                  the amount of positions per page is 20.
+                                type: string
+                                example: Colombia
+                              continent:
+                                description: |-
+                                  Returns all positions
+
+                                  It is returning the positions in pagination
+                                  the amount of positions per page is 20.
+                                type: string
+                                example: América del Sur
+                            type: object
+                          example:
+                            id: COL
+                            name: Colombia
+                            continent: América del Sur
+                        state:
+                          description: |-
+                            Returns all positions
+
+                            It is returning the positions in pagination
+                            the amount of positions per page is 20.
+                          type: array
+                          items:
+                            properties:
+                              id:
+                                description: |-
+                                  Returns all positions
+
+                                  It is returning the positions in pagination
+                                  the amount of positions per page is 20.
+                                type: integer
+                                example: '5'
+                              name:
+                                description: |-
+                                  Returns all positions
+
+                                  It is returning the positions in pagination
+                                  the amount of positions per page is 20.
+                                type: string
+                                example: ANTIOQUIA
+                            type: object
+                          example:
+                            id: '5'
+                            name: ANTIOQUIA
+                        city:
+                          description: |-
+                            Returns all positions
+
+                            It is returning the positions in pagination
+                            the amount of positions per page is 20.
+                          type: array
+                          items:
+                            properties:
+                              id:
+                                description: |-
+                                  Returns all positions
+
+                                  It is returning the positions in pagination
+                                  the amount of positions per page is 20.
+                                type: integer
+                                example: '1017'
+                              name:
+                                description: |-
+                                  Returns all positions
+
+                                  It is returning the positions in pagination
+                                  the amount of positions per page is 20.
+                                type: string
+                                example: Turbo
+                            type: object
+                          example:
+                            id: '1017'
+                            name: Turbo
+                      type: object
+                    example:
+                      - id: MYPOS1
+                        name: Senador
+                        description: Description del cargo de senador
+                        country:
+                          id: COL
+                          name: Colombia
+                          continent: América del Sur
+                        state:
+                          id: '5'
+                          name: ANTIOQUIA
+                        city:
+                          id: '1017'
+                          name: Turbo
+                      - id: MYPOS1
+                        name: Senador
+                        description: Description del cargo de senador
+                        country:
+                          id: COL
+                          name: Colombia
+                          continent: América del Sur
+                        state:
+                          id: '5'
+                          name: ANTIOQUIA
+                        city:
+                          id: '1017'
+                          name: Turbo
+                type: object
+        '401':
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    description: |-
+                      Returns all positions
+
+                      It is returning the positions in pagination
+                      the amount of positions per page is 20.
+                    type: string
+                    format: text
+                    example: Unauthenticated
+                type: object
+        '403':
+          description: User without permission to thi endpoint
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    description: |-
+                      Returns all positions
+
+                      It is returning the positions in pagination
+                      the amount of positions per page is 20.
+                    type: string
+                    format: text
+                    example: Permission denied.
+                type: object
+      security:
+        - bearer: []
+  /api/v1/admin/position:
+    post:
+      tags:
+        - Admin - Position
+      summary: Create a new position
+      description: Create a new position
+      operationId: createPosition
+      requestBody:
+        description: Fields for the new position
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              properties:
+                id:
+                  description: Id for the new position
+                  type: string
+                  format: text
+                  example: MYPOS
+                country_id:
+                  description: Country id where the position is
+                  type: string
+                  example: COL
+                state_id:
+                  description: The state id should be in the country indicated
+                  type: integer
+                  example: '5'
+                city_id:
+                  description: The city id should be in the state and country indicated
+                  type: integer
+                  example: '1017'
+                sector:
+                  description: Sector where the position works
+                  type: string
+                  example: Politico
+                name:
+                  type: string
+                  example: Senador de la Republica
+                description:
+                  type: string
+                  example: Descripción del cargo de senador
+              type: object
+      responses:
+        '200':
+          description: Position created
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: Position created successfully
+                type: object
+        '401':
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    format: text
+                    example: Unauthenticated
+                type: object
+        '403':
+          description: User without permission to the endpoint
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    format: text
+                    example: Permission denied.
+                type: object
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: The given data was invalid.
+                  errors:
+                    example: '{''field'':[''Error message'']}'
+                type: object
+      security:
+        - bearer: []
+  '/api/v1/admin/position/{position_id}':
+    get:
+      tags:
+        - Admin - Position
+      summary: Get a specific position
+      description: Get a specific position
+      operationId: getPosition
+      parameters:
+        - name: position_id
+          in: path
+          required: true
+          example: MYPOS1
+      responses:
+        '200':
+          description: Specific position
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    description: Return a specific position
+                    type: array
+                    items:
+                      properties:
+                        id:
+                          description: Return a specific position
+                          type: string
+                          example: MYPOS1
+                        name:
+                          description: Return a specific position
+                          type: string
+                          example: Senador
+                        description:
+                          description: Return a specific position
+                          type: string
+                          format: text
+                          example: Descripción cargo de senador
+                        country:
+                          description: Return a specific position
+                          type: array
+                          items:
+                            properties:
+                              id:
+                                description: Return a specific position
+                                type: string
+                                example: COL
+                              name:
+                                description: Return a specific position
+                                type: string
+                                example: Colombia
+                              continent:
+                                description: Return a specific position
+                                type: string
+                                example: América del Sur
+                            type: object
+                          example:
+                            id: COL
+                            name: Colombia
+                            continent: América del Sur
+                        state:
+                          description: Return a specific position
+                          type: array
+                          items:
+                            properties:
+                              id:
+                                description: Return a specific position
+                                type: integer
+                                example: '5'
+                              name:
+                                description: Return a specific position
+                                type: string
+                                example: ANTIOQUIA
+                            type: object
+                          example:
+                            id: '5'
+                            name: ANTIOQUIA
+                        city:
+                          description: Return a specific position
+                          type: array
+                          items:
+                            properties:
+                              id:
+                                description: Return a specific position
+                                type: integer
+                                example: '1017'
+                              name:
+                                description: Return a specific position
+                                type: string
+                                example: Turbo
+                            type: object
+                          example:
+                            id: '1017'
+                            name: Turbo
+                      type: object
+                    example:
+                      id: MYPOS1
+                      name: Senador
+                      description: Description del cargo de senador
+                      country:
+                        id: COL
+                        name: Colombia
+                        continent: América del Sur
+                      state:
+                        id: '5'
+                        name: ANTIOQUIA
+                      city:
+                        id: '1017'
+                        name: Turbo
+                type: object
+        '401':
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    description: Return a specific position
+                    type: string
+                    format: text
+                    example: Unauthenticated
+                type: object
+        '403':
+          description: User without permission to the endpoint
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    description: Return a specific position
+                    type: string
+                    format: text
+                    example: Permission denied.
+                type: object
+        '404':
+          description: Political party not found
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    description: Return a specific position
+                    type: string
+                    format: text
+                    example: Position not found
+                type: object
+      security:
+        - bearer: []
+    delete:
+      tags:
+        - Admin - Position
+      summary: Delete a specific position
+      description: Delete a specific position
+      operationId: deletePosition
+      parameters:
+        - name: position_id
+          in: path
+          required: true
+          example: MYPOS2
+      responses:
+        '204':
+          description: 'null'
+        '401':
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    format: text
+                    example: Unauthenticated
+                type: object
+        '403':
+          description: User without permission to the endpoint
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    format: text
+                    example: Permission denied.
+                type: object
+        '404':
+          description: Political party not found
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    format: text
+                    example: Position not found
+                type: object
+      security:
+        - bearer: []
+    patch:
+      tags:
+        - Admin - Position
+      summary: Update a specific position
+      description: Update a specific position
+      operationId: updatePosition
+      parameters:
+        - name: position_id
+          in: path
+          required: true
+          example: MYPOS1
+      requestBody:
+        description: Fields to update
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              properties:
+                country_id:
+                  description: Country id where the position is
+                  type: string
+                  example: COL
+                state_id:
+                  description: The state id should be in the country indicated
+                  type: integer
+                  example: '5'
+                city_id:
+                  description: The city id should be in the state and country indicated
+                  type: integer
+                  example: '1017'
+                sector:
+                  description: Sector where the position works
+                  type: string
+                  example: Politico
+                name:
+                  type: string
+                  example: Senador de la Republica
+                description:
+                  type: string
+                  example: Descripción del cargo de senador
+              type: object
+      responses:
+        '200':
+          description: Specific position
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    type: array
+                    items:
+                      properties:
+                        id:
+                          type: string
+                          example: MYPOS1
+                        name:
+                          type: string
+                          example: Senador
+                        description:
+                          type: string
+                          format: text
+                          example: Descripción cargo de senador
+                        country:
+                          type: array
+                          items:
+                            properties:
+                              id:
+                                type: string
+                                example: COL
+                              name:
+                                type: string
+                                example: Colombia
+                              continent:
+                                type: string
+                                example: América del Sur
+                            type: object
+                          example:
+                            id: COL
+                            name: Colombia
+                            continent: América del Sur
+                        state:
+                          type: array
+                          items:
+                            properties:
+                              id:
+                                type: integer
+                                example: '5'
+                              name:
+                                type: string
+                                example: ANTIOQUIA
+                            type: object
+                          example:
+                            id: '5'
+                            name: ANTIOQUIA
+                        city:
+                          type: array
+                          items:
+                            properties:
+                              id:
+                                type: integer
+                                example: '1017'
+                              name:
+                                type: string
+                                example: Turbo
+                            type: object
+                          example:
+                            id: '1017'
+                            name: Turbo
+                      type: object
+                    example:
+                      id: MYPOS1
+                      name: Senador
+                      description: Description del cargo de senador
+                      country:
+                        id: COL
+                        name: Colombia
+                        continent: América del Sur
+                      state:
+                        id: '5'
+                        name: ANTIOQUIA
+                      city:
+                        id: '1017'
+                        name: Turbo
+                type: object
+        '401':
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    format: text
+                    example: Unauthenticated
+                type: object
+        '403':
+          description: User without permission to the endpoint
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    format: text
+                    example: Permission denied.
+                type: object
+        '404':
+          description: Political party not found
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    format: text
+                    example: Position not found
+                type: object
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: The given data was invalid.
+                  errors:
+                    example: '{''field'':[''Error message'']}'
+                type: object
+      security:
+        - bearer: []
+components:
+  securitySchemes:
+    bearer:
+      type: http
+      name: Bearer Token
+      bearerFormat: JWT
+      scheme: bearer
+security:
+  - []
+servers:
+  - url: 'http://localhost:8084'
+    description: local
