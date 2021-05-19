@@ -4,7 +4,7 @@ info:
   description: OpenAPI spec for the hoydigo.com API
   license:
     name: Apache 2.0
-    url: https://www.apache.org/licenses/LICENSE-2.0.html
+    url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   version: 1.0.0
 paths:
   /api/v1/auth/get_token:
@@ -15,7 +15,7 @@ paths:
       description: Get new access token
       operationId: getToken
       requestBody:
-        description: Pass user credentials
+        description: User credentials
         required: true
         content:
           multipart/form-data:
@@ -84,6 +84,26 @@ paths:
                 example-1:
                   value:
                     message: Invalid login credentials.
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - message
+                x-examples:
+                  example-1:
+                    message: Influencer NAME created successfully
+              examples:
+                example-1:
+                  value:
+                    message: Specific internal error.
     parameters: []
   /api/v1/user/register:
     post:
@@ -133,23 +153,6 @@ paths:
                     format: text
                     example: User registered successfully
                 type: object
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                properties:
-                  field1:
-                    description: Register a new user
-                    type: string
-                    format: text
-                    example: Error description
-                  field2:
-                    description: Register a new user
-                    type: string
-                    format: text
-                    example: Error description
-                type: object
         '401':
           description: Unauthenticated
           content:
@@ -162,6 +165,90 @@ paths:
                     format: text
                     example: Unauthenticated
                 type: object
+              examples:
+                example-1:
+                  value:
+                    message: Unauthenticated
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - message
+                x-examples:
+                  example-1:
+                    message: Permission denied.
+              examples:
+                example-1:
+                  value:
+                    message: Permission denied.
+        '422':
+          description: Unprocessable Entity (WebDAV)
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                  errors:
+                    type: object
+                    properties:
+                      field:
+                        type: array
+                        items:
+                          required: []
+                          properties: {}
+                    required:
+                      - field
+                required:
+                  - message
+                  - errors
+                x-examples:
+                  example-1:
+                    message: The given data was invalid.
+                    errors:
+                      field:
+                        - Error1 Field 1
+              examples:
+                example-1:
+                  value:
+                    message: The given data was invalid.
+                    errors:
+                      field1:
+                        - Error1 Field 1
+                        - Error2 field 1
+                      field2:
+                        - Error1 Field 2
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - message
+                x-examples:
+                  example-1:
+                    message: Specific internal error.
+              examples:
+                example-1:
+                  value:
+                    message: Specific internal error.
       security:
         - bearer: []
   /api/v1/admin/influencer:
@@ -1046,11 +1133,11 @@ paths:
           content:
             application/json:
               schema:
+                type: object
                 properties:
                   message:
                     type: string
                     example: Position created successfully
-                type: object
         '401':
           description: Unauthenticated
           content:
