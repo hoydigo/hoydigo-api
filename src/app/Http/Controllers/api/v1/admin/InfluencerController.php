@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\api\v1\admin;
 
+use App\Events\InfluencerCreated;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\admin\StoreInfluencerRequest;
 use App\Http\Requests\admin\UpdateInfluencerRequest;
@@ -49,6 +50,9 @@ class InfluencerController extends Controller
                 'twitter_username'      => preg_replace('/^@/', '', $request->twitter_username),
                 'status'                => Config::get('influencer.status.pending'),
             ]);
+            $influencer->refresh();
+
+            event(new InfluencerCreated($influencer));
 
             return response()->json(['message' => 'Influencer ' . $influencer->name . ' created successfully'], 200);
 
