@@ -153,6 +153,10 @@ paths:
                     format: text
                     example: User registered successfully
                 type: object
+              examples:
+                example-1:
+                  value:
+                    message: User registered successfully
         '401':
           description: Unauthenticated
           content:
@@ -459,6 +463,24 @@ paths:
                           name: Centro
                           description: Se conoce por centro ...
                 type: object
+              examples:
+                example-1:
+                  value:
+                    data:
+                      - id: MIPA2
+                        name: Mi partido
+                        description: Description del partido
+                        political_position:
+                          id: CEN
+                          name: Centro
+                          description: Se conoce por centro ...
+                      - id: MIPAR
+                        name: Mi partido
+                        description: Description del partido
+                        political_position:
+                          id: CEN
+                          name: Centro
+                          description: Se conoce por centro ...
         '401':
           description: Unauthenticated
           content:
@@ -475,6 +497,10 @@ paths:
                     format: text
                     example: Unauthenticated
                 type: object
+              examples:
+                example-1:
+                  value:
+                    message: Unauthenticated
         '403':
           description: User without permission to thi endpoint
           content:
@@ -491,6 +517,30 @@ paths:
                     format: text
                     example: Permission denied.
                 type: object
+              examples:
+                example-1:
+                  value:
+                    message: Permission denied.
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - message
+                x-examples:
+                  example-1:
+                    message: Specific internal error.
+              examples:
+                example-1:
+                  value:
+                    message: Specific internal error.
       security:
         - bearer: []
     post:
@@ -536,6 +586,10 @@ paths:
                     type: string
                     example: Political party created successfully
                 type: object
+              examples:
+                example-1:
+                  value:
+                    message: Political party created successfully
         '401':
           description: Unauthenticated
           content:
@@ -548,6 +602,10 @@ paths:
                     format: text
                     example: Unauthenticated
                 type: object
+              examples:
+                example-1:
+                  value:
+                    message: Unauthenticated
         '403':
           description: User without permission to the endpoint
           content:
@@ -560,6 +618,10 @@ paths:
                     format: text
                     example: Permission denied.
                 type: object
+              examples:
+                example-1:
+                  value:
+                    message: Permission denied.
         '422':
           description: Unprocessable Entity
           content:
@@ -574,6 +636,36 @@ paths:
                     description: Create a new political party
                     example: '{''field'':[''Error message'']}'
                 type: object
+              examples:
+                example-1:
+                  value:
+                    message: The given data was invalid.
+                    errors:
+                      field1:
+                        - Error1 Field 1
+                        - Error2 field 1
+                      field2:
+                        - Error1 Field 2
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - message
+                x-examples:
+                  example-1:
+                    message: Specific internal error.
+              examples:
+                example-1:
+                  value:
+                    message: Specific internal error.
       security:
         - bearer: []
   '/api/v1/admin/political-party/{political_party_id}':
@@ -647,6 +739,17 @@ paths:
                         name: Centro
                         description: Se conoce por centro ...
                 type: object
+              examples:
+                example-1:
+                  value:
+                    data:
+                      id: MIPAR
+                      name: Mi partido
+                      description: Description del partido
+                      political_position:
+                        id: CEN
+                        name: Centro
+                        description: Se conoce por centro ...
         '401':
           description: Unauthenticated
           content:
@@ -659,6 +762,10 @@ paths:
                     format: text
                     example: Unauthenticated
                 type: object
+              examples:
+                example-1:
+                  value:
+                    message: Unauthenticated
         '403':
           description: User without permission to the endpoint
           content:
@@ -671,6 +778,10 @@ paths:
                     format: text
                     example: Permission denied.
                 type: object
+              examples:
+                example-1:
+                  value:
+                    message: Permission denied.
         '404':
           description: Political party not found
           content:
@@ -683,6 +794,30 @@ paths:
                     format: text
                     example: Political party not found
                 type: object
+              examples:
+                example-1:
+                  value:
+                    message: Political party not found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - message
+                x-examples:
+                  example-1:
+                    message: Specific internal error.
+              examples:
+                example-1:
+                  value:
+                    message: Specific internal error.
       security:
         - bearer: []
     delete:
@@ -699,6 +834,11 @@ paths:
       responses:
         '204':
           description: 'null'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
         '401':
           description: Unauthenticated
           content:
@@ -735,6 +875,26 @@ paths:
                     format: text
                     example: Political party not found
                 type: object
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - message
+                x-examples:
+                  example-1:
+                    message: Specific internal error.
+              examples:
+                example-1:
+                  value:
+                    message: Specific internal error.
       security:
         - bearer: []
     patch:
@@ -827,6 +987,17 @@ paths:
                         name: Centro
                         description: Se conoce por centro ...
                 type: object
+              examples:
+                example-1:
+                  value:
+                    data:
+                      id: MIPAR
+                      name: Mi partido
+                      description: Description del partido
+                      political_position:
+                        id: CEN
+                        name: Centro
+                        description: Se conoce por centro ...
         '401':
           description: Unauthenticated
           content:
@@ -839,6 +1010,10 @@ paths:
                     format: text
                     example: Unauthenticated
                 type: object
+              examples:
+                example-1:
+                  value:
+                    message: Unauthenticated
         '403':
           description: User without permission to the endpoint
           content:
@@ -851,6 +1026,10 @@ paths:
                     format: text
                     example: Permission denied.
                 type: object
+              examples:
+                example-1:
+                  value:
+                    message: Permission denied.
         '404':
           description: Political party not found
           content:
@@ -863,6 +1042,10 @@ paths:
                     format: text
                     example: Political party not found
                 type: object
+              examples:
+                example-1:
+                  value:
+                    message: Political party not found
         '422':
           description: Unprocessable Entity
           content:
@@ -877,6 +1060,36 @@ paths:
                     description: Update a specific political party
                     example: '{''field'':[''Error message'']}'
                 type: object
+              examples:
+                example-1:
+                  value:
+                    message: The given data was invalid.
+                    errors:
+                      field1:
+                        - Error1 Field 1
+                        - Error2 field 1
+                      field2:
+                        - Error1 Field 2
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - message
+                x-examples:
+                  example-1:
+                    message: Specific internal error.
+              examples:
+                example-1:
+                  value:
+                    message: Specific internal error.
       security:
         - bearer: []
   /api/v1/admin/position:
