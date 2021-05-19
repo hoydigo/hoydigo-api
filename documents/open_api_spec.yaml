@@ -167,7 +167,7 @@ paths:
   /api/v1/admin/influencer:
     post:
       tags:
-        - Admin - Influencer
+        - Admin / Influencer
       summary: Create a new influencer
       description: Create a new influencer
       operationId: createInfluencer
@@ -270,7 +270,7 @@ paths:
   /api/v1/admin/political-party:
     get:
       tags:
-        - Admin - Political Party
+        - Admin / Political Party
       summary: List of the political parties
       description: List of the political parties
       operationId: listPoliticalParties
@@ -408,7 +408,7 @@ paths:
         - bearer: []
     post:
       tags:
-        - Admin - Political Party
+        - Admin / Political Party
       summary: Create a new political party
       description: Create a new political party
       operationId: createPoliticalParty
@@ -492,7 +492,7 @@ paths:
   '/api/v1/admin/political-party/{political_party_id}':
     get:
       tags:
-        - Admin - Political Party
+        - Admin / Political Party
       summary: Get a specific political party
       description: Get a specific political party
       operationId: getPoliticalParty
@@ -600,7 +600,7 @@ paths:
         - bearer: []
     delete:
       tags:
-        - Admin - Political Party
+        - Admin / Political Party
       summary: Delete a specific political party
       description: Delete a specific political party
       operationId: deletePoliticalParty
@@ -652,7 +652,7 @@ paths:
         - bearer: []
     patch:
       tags:
-        - Admin - Political Party
+        - Admin / Political Party
       summary: Update a specific political party
       description: Update a specific political party
       operationId: updatePoliticalParty
@@ -795,7 +795,7 @@ paths:
   /api/v1/admin/position:
     get:
       tags:
-        - Admin - Position
+        - Admin / Position
       summary: List of the positions
       description: List of the positions
       operationId: listPositions
@@ -1001,7 +1001,7 @@ paths:
         - bearer: []
     post:
       tags:
-        - Admin - Position
+        - Admin / Position
       summary: Create a new position
       description: Create a new position
       operationId: createPosition
@@ -1090,7 +1090,7 @@ paths:
   '/api/v1/admin/position/{position_id}':
     get:
       tags:
-        - Admin - Position
+        - Admin / Position
       summary: Get a specific position
       description: Get a specific position
       operationId: getPosition
@@ -1236,7 +1236,7 @@ paths:
         - bearer: []
     delete:
       tags:
-        - Admin - Position
+        - Admin / Position
       summary: Delete a specific position
       description: Delete a specific position
       operationId: deletePosition
@@ -1285,7 +1285,7 @@ paths:
         - bearer: []
     patch:
       tags:
-        - Admin - Position
+        - Admin / Position
       summary: Update a specific position
       description: Update a specific position
       operationId: updatePosition

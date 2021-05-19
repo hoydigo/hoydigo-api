@@ -12,3 +12,4 @@
 /src/npm-debug.log
 /src/yarn-error.log
 .idea/
+redoc-static.html
