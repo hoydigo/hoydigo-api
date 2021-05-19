@@ -30,34 +30,34 @@ paths:
                   type: string
                   format: password
                   example: '1234567'
-            examples:
-              example-1:
-                value:
-                  email: user1@mail.com
-                  password: '1234567'
-          application/json:
-            schema:
-              type: object
+            examples: {}
       responses:
         '200':
           description: New token returned
           content:
             application/json:
               schema:
+                description: ''
+                type: object
                 properties:
                   name:
                     type: string
-                    format: text
-                    example: User Name
+                    minLength: 1
                   email:
                     type: string
-                    format: email
-                    example: user1@mail.com
+                    minLength: 1
                   access_token:
                     type: string
-                    format: text
-                    example: NEW_ACESS_TOKEN
-                type: object
+                    minLength: 1
+                required:
+                  - name
+                  - email
+                  - access_token
+                x-examples:
+                  example-1:
+                    name: User Name
+                    email: user1@mail.com
+                    access_token: NEW_ACESS_TOKEN
               examples:
                 example-1:
                   value:
@@ -140,6 +140,7 @@ paths:
                   format: text
                   example: web-guest
               type: object
+            examples: {}
       responses:
         '200':
           description: New user registered
@@ -268,10 +269,7 @@ paths:
         content:
           application/x-www-form-urlencoded:
             schema:
-              required:
-                - political_position_id
-                - name
-                - twitter_username
+              type: object
               properties:
                 political_position_id:
                   description: Political position ID
@@ -286,26 +284,15 @@ paths:
                   description: Influencer Name
                   type: string
                   example: Pepito Perez
-                image:
-                  description: Path where the image is located
-                  type: string
-                twitter_id:
-                  description: TWITTER ID
-                  type: string
                 twitter_username:
                   description: TWITTER USERNAME
                   type: string
                   example: '@pepito'
-                twitter_description:
-                  description: Description on twitter
-                  type: string
-                twitter_url:
-                  description: Influencer twitter url
-                  type: string
-                twitter_verified:
-                  description: Boolean value
-                  type: boolean
-              type: object
+              required:
+                - political_position_id
+                - name
+                - twitter_username
+            examples: {}
       responses:
         '200':
           description: Influencer created
@@ -318,6 +305,10 @@ paths:
                     type: string
                     example: Influencer NAME created successfully
                 type: object
+              examples:
+                example-1:
+                  value:
+                    message: Influencer NAME created successfully
         '401':
           description: Unauthenticated
           content:
@@ -330,6 +321,10 @@ paths:
                     format: text
                     example: Unauthenticated
                 type: object
+              examples:
+                example-1:
+                  value:
+                    message: Unauthenticated
         '403':
           description: User without permission to the endpoint
           content:
@@ -342,6 +337,10 @@ paths:
                     format: text
                     example: Permission denied.
                 type: object
+              examples:
+                example-1:
+                  value:
+                    message: Permission denied.
         '422':
           description: Unprocessable Entity
           content:
@@ -356,8 +355,284 @@ paths:
                     description: Create a new influencer
                     example: '{''field'':[''Error message'']}'
                 type: object
+              examples:
+                example-1:
+                  value:
+                    message: The given data was invalid.
+                    errors:
+                      field1:
+                        - Error1 Field 1
+                        - Error2 field 1
+                      field2:
+                        - Error1 Field 2
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - message
+                x-examples:
+                  example-1:
+                    message: Specific internal error.
+              examples:
+                example-1:
+                  value:
+                    message: Specific internal error.
       security:
         - bearer: []
+    get:
+      summary: List of influencers
+      operationId: get-api-v1-admin-influencer
+      responses:
+        '200':
+          description: List of influencers
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  data:
+                    type: array
+                    uniqueItems: true
+                    minItems: 1
+                    items:
+                      required:
+                        - id
+                        - name
+                        - twitter_username
+                        - status
+                      properties:
+                        id:
+                          type: number
+                        name:
+                          type: string
+                          minLength: 1
+                        image: {}
+                        twitter_id: {}
+                        twitter_username:
+                          type: string
+                          minLength: 1
+                        twitter_description: {}
+                        twitter_url: {}
+                        twitter_verified: {}
+                        status:
+                          type: string
+                          minLength: 1
+                        country:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              minLength: 1
+                            name:
+                              type: string
+                              minLength: 1
+                            continent:
+                              type: string
+                              minLength: 1
+                          required:
+                            - id
+                            - name
+                            - continent
+                        political_position:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              minLength: 1
+                            name:
+                              type: string
+                              minLength: 1
+                            description:
+                              type: string
+                              minLength: 1
+                          required:
+                            - id
+                            - name
+                            - description
+                        political_party:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              minLength: 1
+                            name:
+                              type: string
+                              minLength: 1
+                            description:
+                              type: string
+                              minLength: 1
+                          required:
+                            - id
+                            - name
+                            - description
+                required:
+                  - data
+                x-examples:
+                  example-1:
+                    data:
+                      - id: 1
+                        name: Pepito Segundo Perez
+                        image: null
+                        twitter_id: null
+                        twitter_username: pepito2
+                        twitter_description: null
+                        twitter_url: null
+                        twitter_verified: null
+                        status: PENDING
+                        country:
+                          id: COL
+                          name: Colombia
+                          continent: América del Sur
+                        political_position:
+                          id: CEN
+                          name: Centro
+                          description: 'Se conoce por centro al conjunto de partidos, políticas e ideologías, que se caracteriza por considerarse a sí mismo en el espectro político, como intermedio o como árbitro de posiciones antagónicas tanto de derecha como de izquierda.'
+                        political_party:
+                          id: MIPAR
+                          name: Mi partido de centro
+                          description: Description del partido
+                      - id: 2
+                        name: Pepito Segundo Perez
+                        image: null
+                        twitter_id: null
+                        twitter_username: pepito2
+                        twitter_description: null
+                        twitter_url: null
+                        twitter_verified: null
+                        status: PENDING
+                        country:
+                          id: COL
+                          name: Colombia
+                          continent: América del Sur
+                        political_position:
+                          id: CEN
+                          name: Centro
+                          description: 'Se conoce por centro al conjunto de partidos, políticas e ideologías, que se caracteriza por considerarse a sí mismo en el espectro político, como intermedio o como árbitro de posiciones antagónicas tanto de derecha como de izquierda.'
+                        political_party:
+                          id: MIPAR
+                          name: Mi partido de centro
+                          description: Description del partido
+              examples:
+                example-1:
+                  value:
+                    data:
+                      - id: 1
+                        name: Pepito Segundo Perez
+                        image: null
+                        twitter_id: null
+                        twitter_username: pepito2
+                        twitter_description: null
+                        twitter_url: null
+                        twitter_verified: null
+                        status: PENDING
+                        country:
+                          id: COL
+                          name: Colombia
+                          continent: América del Sur
+                        political_position:
+                          id: CEN
+                          name: Centro
+                          description: 'Se conoce por centro al conjunto de partidos, políticas e ideologías, que se caracteriza por considerarse a sí mismo en el espectro político, como intermedio o como árbitro de posiciones antagónicas tanto de derecha como de izquierda.'
+                        political_party:
+                          id: MIPAR
+                          name: Mi partido de centro
+                          description: Description del partido
+                      - id: 2
+                        name: Pepito Segundo Perez
+                        image: null
+                        twitter_id: null
+                        twitter_username: pepito2
+                        twitter_description: null
+                        twitter_url: null
+                        twitter_verified: null
+                        status: PENDING
+                        country:
+                          id: COL
+                          name: Colombia
+                          continent: América del Sur
+                        political_position:
+                          id: CEN
+                          name: Centro
+                          description: 'Se conoce por centro al conjunto de partidos, políticas e ideologías, que se caracteriza por considerarse a sí mismo en el espectro político, como intermedio o como árbitro de posiciones antagónicas tanto de derecha como de izquierda.'
+                        political_party:
+                          id: MIPAR
+                          name: Mi partido de centro
+                          description: Description del partido
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - message
+                x-examples:
+                  example-1:
+                    message: Unauthenticated
+              examples:
+                example-1:
+                  value:
+                    message: Unauthenticated
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - message
+                x-examples:
+                  example-1:
+                    message: Permission denied.
+              examples:
+                example-1:
+                  value:
+                    message: Permission denied.
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - message
+                x-examples:
+                  example-1:
+                    message: Specific internal error.
+              examples:
+                example-1:
+                  value:
+                    message: Specific internal error.
+      security:
+        - bearer: []
+      parameters: []
+      tags:
+        - Admin / Influencer
+      description: List of influencers
   /api/v1/admin/political-party:
     get:
       tags:
@@ -1398,6 +1673,7 @@ paths:
                   type: string
                   example: Descripción del cargo de senador
               type: object
+            examples: {}
       responses:
         '200':
           description: Position created
@@ -1646,7 +1922,7 @@ paths:
                   value:
                     message: Permission denied.
         '404':
-          description: Political party not found
+          description: Position not found
           content:
             application/json:
               schema:
@@ -1736,7 +2012,7 @@ paths:
                   value:
                     message: Permission denied.
         '404':
-          description: Political party not found
+          description: Position not found
           content:
             application/json:
               schema:
@@ -1944,7 +2220,7 @@ paths:
                   value:
                     message: Permission denied.
         '404':
-          description: Political party not found
+          description: Position not found
           content:
             application/json:
               schema:
@@ -2002,6 +2278,620 @@ paths:
                     message: Specific internal error.
       security:
         - bearer: []
+  '/api/v1/admin/influencer/{influencer_id}':
+    parameters:
+      - schema:
+          type: string
+        name: influencer_id
+        in: path
+        required: true
+    get:
+      summary: Get a specific influencer
+      tags:
+        - Admin / Influencer
+      responses:
+        '200':
+          description: Return a specific influencer
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                      name:
+                        type: string
+                        minLength: 1
+                      image: {}
+                      twitter_id: {}
+                      twitter_username:
+                        type: string
+                        minLength: 1
+                      twitter_description: {}
+                      twitter_url: {}
+                      twitter_verified: {}
+                      status:
+                        type: string
+                        minLength: 1
+                      country:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                            minLength: 1
+                          name:
+                            type: string
+                            minLength: 1
+                          continent:
+                            type: string
+                            minLength: 1
+                        required:
+                          - id
+                          - name
+                          - continent
+                      political_position:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                            minLength: 1
+                          name:
+                            type: string
+                            minLength: 1
+                          description:
+                            type: string
+                            minLength: 1
+                        required:
+                          - id
+                          - name
+                          - description
+                      political_party:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                            minLength: 1
+                          name:
+                            type: string
+                            minLength: 1
+                          description:
+                            type: string
+                            minLength: 1
+                        required:
+                          - id
+                          - name
+                          - description
+                    required:
+                      - id
+                      - name
+                      - twitter_username
+                      - status
+                      - country
+                      - political_position
+                      - political_party
+                required:
+                  - data
+                x-examples:
+                  example-1:
+                    data:
+                      id: 1
+                      name: Pepito Segundo Perez
+                      image: null
+                      twitter_id: null
+                      twitter_username: pepito2
+                      twitter_description: null
+                      twitter_url: null
+                      twitter_verified: null
+                      status: PENDING
+                      country:
+                        id: COL
+                        name: Colombia
+                        continent: América del Sur
+                      political_position:
+                        id: CEN
+                        name: Centro
+                        description: 'Se conoce por centro al conjunto de partidos, políticas e ideologías, que se caracteriza por considerarse a sí mismo en el espectro político, como intermedio o como árbitro de posiciones antagónicas tanto de derecha como de izquierda.'
+                      political_party:
+                        id: MIPAR
+                        name: Mi partido de centro
+                        description: Description del partido
+              examples:
+                example-1:
+                  value:
+                    data:
+                      id: 1
+                      name: Pepito Segundo Perez
+                      image: null
+                      twitter_id: null
+                      twitter_username: pepito2
+                      twitter_description: null
+                      twitter_url: null
+                      twitter_verified: null
+                      status: PENDING
+                      country:
+                        id: COL
+                        name: Colombia
+                        continent: América del Sur
+                      political_position:
+                        id: CEN
+                        name: Centro
+                        description: 'Se conoce por centro al conjunto de partidos, políticas e ideologías, que se caracteriza por considerarse a sí mismo en el espectro político, como intermedio o como árbitro de posiciones antagónicas tanto de derecha como de izquierda.'
+                      political_party:
+                        id: MIPAR
+                        name: Mi partido de centro
+                        description: Description del partido
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - message
+                x-examples:
+                  example-1:
+                    message: Unauthenticated
+              examples:
+                example-1:
+                  value:
+                    message: Unauthenticated
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - message
+                x-examples:
+                  example-1:
+                    message: Permission denied.
+              examples:
+                example-1:
+                  value:
+                    message: Permission denied.
+        '404':
+          description: Influencer not found
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - message
+                x-examples:
+                  example-1:
+                    message: Position not found
+              examples:
+                example-1:
+                  value:
+                    message: Influencer not found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - message
+                x-examples:
+                  example-1:
+                    message: Specific internal error.
+              examples:
+                example-1:
+                  value:
+                    message: Specific internal error.
+      operationId: get-api-v1-admin-influencer-influencer_id
+      description: Get a specific influencer
+    patch:
+      summary: Update a specific influencer
+      operationId: patch-api-v1-admin-influencer-influencer_id
+      responses:
+        '200':
+          description: Influencer updated
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                      name:
+                        type: string
+                        minLength: 1
+                      image: {}
+                      twitter_id: {}
+                      twitter_username:
+                        type: string
+                        minLength: 1
+                      twitter_description: {}
+                      twitter_url: {}
+                      twitter_verified: {}
+                      status:
+                        type: string
+                        minLength: 1
+                      country:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                            minLength: 1
+                          name:
+                            type: string
+                            minLength: 1
+                          continent:
+                            type: string
+                            minLength: 1
+                        required:
+                          - id
+                          - name
+                          - continent
+                      political_position:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                            minLength: 1
+                          name:
+                            type: string
+                            minLength: 1
+                          description:
+                            type: string
+                            minLength: 1
+                        required:
+                          - id
+                          - name
+                          - description
+                      political_party:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                            minLength: 1
+                          name:
+                            type: string
+                            minLength: 1
+                          description:
+                            type: string
+                            minLength: 1
+                        required:
+                          - id
+                          - name
+                          - description
+                    required:
+                      - id
+                      - name
+                      - twitter_username
+                      - status
+                      - country
+                      - political_position
+                      - political_party
+                required:
+                  - data
+                x-examples:
+                  example-1:
+                    data:
+                      id: 1
+                      name: Pepito Segundo Perez
+                      image: null
+                      twitter_id: null
+                      twitter_username: '@pepito3'
+                      twitter_description: null
+                      twitter_url: null
+                      twitter_verified: null
+                      status: PENDING
+                      country:
+                        id: COL
+                        name: Colombia
+                        continent: América del Sur
+                      political_position:
+                        id: CEN
+                        name: Centro
+                        description: 'Se conoce por centro al conjunto de partidos, políticas e ideologías, que se caracteriza por considerarse a sí mismo en el espectro político, como intermedio o como árbitro de posiciones antagónicas tanto de derecha como de izquierda.'
+                      political_party:
+                        id: MIPAR
+                        name: Mi partido de centro
+                        description: Description del partido
+              examples:
+                example-1:
+                  value:
+                    data:
+                      id: 1
+                      name: Pepito Segundo Perez
+                      image: null
+                      twitter_id: null
+                      twitter_username: '@pepito3'
+                      twitter_description: null
+                      twitter_url: null
+                      twitter_verified: null
+                      status: PENDING
+                      country:
+                        id: COL
+                        name: Colombia
+                        continent: América del Sur
+                      political_position:
+                        id: CEN
+                        name: Centro
+                        description: 'Se conoce por centro al conjunto de partidos, políticas e ideologías, que se caracteriza por considerarse a sí mismo en el espectro político, como intermedio o como árbitro de posiciones antagónicas tanto de derecha como de izquierda.'
+                      political_party:
+                        id: MIPAR
+                        name: Mi partido de centro
+                        description: Description del partido
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - message
+                x-examples:
+                  example-1:
+                    message: Unauthenticated
+              examples:
+                example-1:
+                  value:
+                    message: Unauthenticated
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - message
+                x-examples:
+                  example-1:
+                    message: Permission denied.
+              examples:
+                example-1:
+                  value:
+                    message: Permission denied.
+        '404':
+          description: Influencer not found
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - message
+                x-examples:
+                  example-1:
+                    message: Influencer not found
+              examples:
+                example-1:
+                  value:
+                    message: Influencer not found
+        '422':
+          description: Unprocessable Entity (WebDAV)
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                  errors:
+                    type: object
+                    properties:
+                      field:
+                        type: array
+                        items:
+                          required: []
+                          properties: {}
+                    required:
+                      - field
+                required:
+                  - message
+                  - errors
+                x-examples:
+                  example-1:
+                    message: The given data was invalid.
+                    errors:
+                      field:
+                        - Error1 Field 1
+                        - Error2 field 1
+              examples:
+                example-1:
+                  value:
+                    message: The given data was invalid.
+                    errors:
+                      field1:
+                        - Error1 Field 1
+                        - Error2 field 1
+                      field2:
+                        - Error1 Field 2
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - message
+                x-examples:
+                  example-1:
+                    message: Specific internal error.
+              examples:
+                example-1:
+                  value:
+                    message: Specific internal error.
+      description: Update a specific influencer
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              description: ''
+              type: object
+              x-examples:
+                example-1:
+                  political_position_id: CEN
+                  political_party_id: MIPAR
+                  name: Pepito Perez
+                  twitter_username: '@pepito'
+              properties:
+                political_position_id:
+                  type: string
+                  minLength: 1
+                political_party_id:
+                  type: string
+                  minLength: 1
+                name:
+                  type: string
+                  minLength: 1
+                twitter_username:
+                  type: string
+                  minLength: 1
+            examples: {}
+        description: Fields to update
+      tags:
+        - Admin / Influencer
+    delete:
+      summary: Delete a specific influencer
+      operationId: delete-api-v1-admin-influencer-influencer_id
+      responses:
+        '200':
+          description: 'null'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+              examples:
+                example-1:
+                  value: {}
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - message
+                x-examples:
+                  example-1:
+                    message: Unauthenticated
+              examples:
+                example-1:
+                  value:
+                    message: Unauthenticated
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - message
+                x-examples:
+                  example-1:
+                    message: Permission denied.
+              examples:
+                example-1:
+                  value:
+                    message: Permission denied.
+        '404':
+          description: Influencer not found
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - message
+                x-examples:
+                  example-1:
+                    message: Influencer not found
+              examples:
+                example-1:
+                  value:
+                    message: Influencer not found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - message
+                x-examples:
+                  example-1:
+                    message: Specific internal error.
+              examples:
+                example-1:
+                  value:
+                    message: Specific internal error.
+      description: Delete a specific influencer
+      tags:
+        - Admin / Influencer
 components:
   securitySchemes:
     bearer:
