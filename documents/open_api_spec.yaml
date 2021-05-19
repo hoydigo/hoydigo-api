@@ -1265,6 +1265,36 @@ paths:
                           id: '1017'
                           name: Turbo
                 type: object
+              examples:
+                example-1:
+                  value:
+                    data:
+                      - id: MYPOS1
+                        name: Senador
+                        description: Description del cargo de senador
+                        country:
+                          id: COL
+                          name: Colombia
+                          continent: América del Sur
+                        state:
+                          id: '5'
+                          name: ANTIOQUIA
+                        city:
+                          id: '1017'
+                          name: Turbo
+                      - id: MYPOS1
+                        name: Senador
+                        description: Description del cargo de senador
+                        country:
+                          id: COL
+                          name: Colombia
+                          continent: América del Sur
+                        state:
+                          id: '5'
+                          name: ANTIOQUIA
+                        city:
+                          id: '1017'
+                          name: Turbo
         '401':
           description: Unauthenticated
           content:
@@ -1281,8 +1311,12 @@ paths:
                     format: text
                     example: Unauthenticated
                 type: object
+              examples:
+                example-1:
+                  value:
+                    message: Unauthenticated
         '403':
-          description: User without permission to thi endpoint
+          description: User without permission to the endpoint
           content:
             application/json:
               schema:
@@ -1297,6 +1331,30 @@ paths:
                     format: text
                     example: Permission denied.
                 type: object
+              examples:
+                example-1:
+                  value:
+                    message: Permission denied.
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - message
+                x-examples:
+                  example-1:
+                    message: Specific internal error.
+              examples:
+                example-1:
+                  value:
+                    message: Specific internal error.
       security:
         - bearer: []
     post:
@@ -1351,6 +1409,10 @@ paths:
                   message:
                     type: string
                     example: Position created successfully
+              examples:
+                example-1:
+                  value:
+                    message: Position created successfully
         '401':
           description: Unauthenticated
           content:
@@ -1362,6 +1424,10 @@ paths:
                     format: text
                     example: Unauthenticated
                 type: object
+              examples:
+                example-1:
+                  value:
+                    message: Unauthenticated
         '403':
           description: User without permission to the endpoint
           content:
@@ -1373,6 +1439,10 @@ paths:
                     format: text
                     example: Permission denied.
                 type: object
+              examples:
+                example-1:
+                  value:
+                    message: Permission denied.
         '422':
           description: Unprocessable Entity
           content:
@@ -1385,6 +1455,36 @@ paths:
                   errors:
                     example: '{''field'':[''Error message'']}'
                 type: object
+              examples:
+                example-1:
+                  value:
+                    message: The given data was invalid.
+                    errors:
+                      field1:
+                        - Error1 Field 1
+                        - Error2 field 1
+                      field2:
+                        - Error1 Field 2
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - message
+                x-examples:
+                  example-1:
+                    message: Specific internal error.
+              examples:
+                example-1:
+                  value:
+                    message: Specific internal error.
       security:
         - bearer: []
   '/api/v1/admin/position/{position_id}':
@@ -1496,6 +1596,23 @@ paths:
                         id: '1017'
                         name: Turbo
                 type: object
+              examples:
+                example-1:
+                  value:
+                    data:
+                      id: MYPOS1
+                      name: Senador
+                      description: Description del cargo de senador
+                      country:
+                        id: COL
+                        name: Colombia
+                        continent: América del Sur
+                      state:
+                        id: '5'
+                        name: ANTIOQUIA
+                      city:
+                        id: '1017'
+                        name: Turbo
         '401':
           description: Unauthenticated
           content:
@@ -1508,6 +1625,10 @@ paths:
                     format: text
                     example: Unauthenticated
                 type: object
+              examples:
+                example-1:
+                  value:
+                    message: Unauthenticated
         '403':
           description: User without permission to the endpoint
           content:
@@ -1520,6 +1641,10 @@ paths:
                     format: text
                     example: Permission denied.
                 type: object
+              examples:
+                example-1:
+                  value:
+                    message: Permission denied.
         '404':
           description: Political party not found
           content:
@@ -1532,6 +1657,30 @@ paths:
                     format: text
                     example: Position not found
                 type: object
+              examples:
+                example-1:
+                  value:
+                    message: Position not found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - message
+                x-examples:
+                  example-1:
+                    message: Specific internal error.
+              examples:
+                example-1:
+                  value:
+                    message: Specific internal error.
       security:
         - bearer: []
     delete:
@@ -1548,6 +1697,14 @@ paths:
       responses:
         '204':
           description: 'null'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+              examples:
+                example-1:
+                  value: {}
         '401':
           description: Unauthenticated
           content:
@@ -1559,6 +1716,10 @@ paths:
                     format: text
                     example: Unauthenticated
                 type: object
+              examples:
+                example-1:
+                  value:
+                    message: Unauthenticated
         '403':
           description: User without permission to the endpoint
           content:
@@ -1570,6 +1731,10 @@ paths:
                     format: text
                     example: Permission denied.
                 type: object
+              examples:
+                example-1:
+                  value:
+                    message: Permission denied.
         '404':
           description: Political party not found
           content:
@@ -1581,6 +1746,30 @@ paths:
                     format: text
                     example: Position not found
                 type: object
+              examples:
+                example-1:
+                  value:
+                    message: Position not found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - message
+                x-examples:
+                  example-1:
+                    message: Specific internal error.
+              examples:
+                example-1:
+                  value:
+                    message: Specific internal error.
       security:
         - bearer: []
     patch:
@@ -1707,6 +1896,23 @@ paths:
                         id: '1017'
                         name: Turbo
                 type: object
+              examples:
+                example-1:
+                  value:
+                    data:
+                      id: MYPOS1
+                      name: Senador
+                      description: Description del cargo de senador
+                      country:
+                        id: COL
+                        name: Colombia
+                        continent: América del Sur
+                      state:
+                        id: '5'
+                        name: ANTIOQUIA
+                      city:
+                        id: '1017'
+                        name: Turbo
         '401':
           description: Unauthenticated
           content:
@@ -1718,6 +1924,10 @@ paths:
                     format: text
                     example: Unauthenticated
                 type: object
+              examples:
+                example-1:
+                  value:
+                    message: Unauthenticated
         '403':
           description: User without permission to the endpoint
           content:
@@ -1729,6 +1939,10 @@ paths:
                     format: text
                     example: Permission denied.
                 type: object
+              examples:
+                example-1:
+                  value:
+                    message: Permission denied.
         '404':
           description: Political party not found
           content:
@@ -1740,6 +1954,10 @@ paths:
                     format: text
                     example: Position not found
                 type: object
+              examples:
+                example-1:
+                  value:
+                    message: Position not found
         '422':
           description: Unprocessable Entity
           content:
@@ -1752,6 +1970,36 @@ paths:
                   errors:
                     example: '{''field'':[''Error message'']}'
                 type: object
+              examples:
+                example-1:
+                  value:
+                    message: The given data was invalid.
+                    errors:
+                      field1:
+                        - Error1 Field 1
+                        - Error2 field 1
+                      field2:
+                        - Error1 Field 2
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - message
+                x-examples:
+                  example-1:
+                    message: Specific internal error.
+              examples:
+                example-1:
+                  value:
+                    message: Specific internal error.
       security:
         - bearer: []
 components:
