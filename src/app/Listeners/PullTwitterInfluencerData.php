@@ -4,9 +4,11 @@ namespace App\Listeners;
 
 use App\Classes\Twitter\TwitterClient;
 use App\Events\InfluencerCreated;
+use App\Exceptions\TwitterClientCouldNotGetUserByUsernameException;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Log;
 
 class PullTwitterInfluencerData implements ShouldQueue
 {
@@ -34,17 +36,35 @@ class PullTwitterInfluencerData implements ShouldQueue
      */
     public function handle(InfluencerCreated $event)
     {
-        $twitter_client = new TwitterClient(Config::get('twitter.bearer_token'));
+        try {
+            $twitter_client = new TwitterClient(Config::get('twitter.bearer_token'));
 
-        $twitter_user = $twitter_client->getUserByUsername($event->influencer->twitter_username);
+            $twitter_user = $twitter_client->getUserByUsername($event->influencer->twitter_username);
 
-        $event->influencer->refresh();
-        $event->influencer->image = $twitter_user->getImageUrl();
-        $event->influencer->twitter_id = $twitter_user->getId();
-        $event->influencer->twitter_description = $twitter_user->getDescription();
-        $event->influencer->twitter_url = $twitter_user->getUrl();
-        $event->influencer->twitter_verified = $twitter_user->getVerified();
-        $event->influencer->status = Config::get('influencer.status.active');
-        $event->influencer->save();
+            $event->influencer->refresh();
+            $event->influencer->image = $twitter_user->getImageUrl();
+            $event->influencer->twitter_id = $twitter_user->getId();
+            $event->influencer->twitter_description = $twitter_user->getDescription();
+            $event->influencer->twitter_url = $twitter_user->getUrl();
+            $event->influencer->twitter_verified = $twitter_user->getVerified();
+            $event->influencer->status = Config::get('influencer.status.active');
+            $event->influencer->save();
+
+            Log::info('influencer: ' . $event->influencer->twitter_username . ', message: Activated successfully.');
+
+        } catch (TwitterClientCouldNotGetUserByUsernameException $e) {
+            Log::error(
+                'influencer: ' . $event->influencer->twitter_username . ', ' .
+                'message: Error trying to get user data from twitter.' . ', ' .
+                'error: ' . $e->getMessage()
+            );
+
+        } catch (\Throwable $e) {
+            Log::error(
+                'influencer: ' . $event->influencer->twitter_username . ', ' .
+                'error: ' . $e->getMessage()
+            );
+
+        }
     }
 }

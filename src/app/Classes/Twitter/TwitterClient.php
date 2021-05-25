@@ -4,6 +4,7 @@
 namespace App\Classes\Twitter;
 
 
+use App\Exceptions\TwitterClientCouldNotGetUserByUsernameException;
 use Illuminate\Support\Facades\Http;
 
 class TwitterClient
@@ -39,24 +40,29 @@ class TwitterClient
      */
     public function getUserByUsername(string $username): TwitterUserEntity
     {
-        $fields = [
-            'description',
-            'id',
-            'location',
-            'name',
-            'profile_image_url',
-            'url',
-            'username',
-            'verified',
-        ];
+        try {
+            $fields = [
+                'description',
+                'id',
+                'location',
+                'name',
+                'profile_image_url',
+                'url',
+                'username',
+                'verified',
+            ];
 
-        $response = Http::withToken($this->token)
-            ->get(
-                str_replace(":username", $username, self::USER_BY_USERNAME_ENDPOINT),
-                ['user.fields' => implode(',', $fields)]
-            );
+            $response = Http::withToken($this->token)
+                ->get(
+                    str_replace(":username", $username, self::USER_BY_USERNAME_ENDPOINT),
+                    ['user.fields' => implode(',', $fields)]
+                );
 
-        return new TwitterUserEntity($response);
+            return new TwitterUserEntity($response);
+
+        } catch (\Throwable $e) {
+            throw new TwitterClientCouldNotGetUserByUsernameException($e->getMessage());
+        }
     }
 
 }
