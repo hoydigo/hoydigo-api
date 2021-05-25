@@ -14,7 +14,7 @@ return [
     */
     'status' => [
         'pending' => 'PENDING',
-        'active' => 'ACTIVE',
+        'active'  => 'ACTIVE',
         'disable' => 'DISABLE',
     ],
 

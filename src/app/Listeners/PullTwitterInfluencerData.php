@@ -44,7 +44,7 @@ class PullTwitterInfluencerData implements ShouldQueue
         $event->influencer->twitter_description = $twitter_user->getDescription();
         $event->influencer->twitter_url = $twitter_user->getUrl();
         $event->influencer->twitter_verified = $twitter_user->getVerified();
-        $event->influencer->status = 'ACTIVE';
+        $event->influencer->status = Config::get('influencer.status.active');
         $event->influencer->save();
     }
 }
