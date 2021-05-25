@@ -4,19 +4,27 @@ namespace App\Listeners;
 
 use App\Classes\Twitter\TwitterClient;
 use App\Events\InfluencerCreated;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Config;
 
-class PullTwitterInfluencerData
+class PullTwitterInfluencerData implements ShouldQueue
 {
+    use InteractsWithQueue;
+
     /**
-     * Create the event listener.
+     * The connection the job should be sent to.
      *
-     * @return void
+     * @var string
      */
-    public function __construct()
-    {
-        //
-    }
+    public $connection = 'database';
+
+    /**
+     * The queue the job should be sent to.
+     *
+     * @var string
+     */
+    public $queue = 'listeners';
 
     /**
      * Handle the event.
