@@ -1,40 +1,36 @@
 ###############################################################################
 #                          Generated on phpdocker.io                          #
 ###############################################################################
-version: "3.1"
+version: '3.1'
 services:
+  hoydigo-mysql:
+    image: 'mysql:8.0'
+    working_dir: /app
+    volumes:
+      - './data:/app'
+    environment:
+      - MYSQL_ROOT_PASSWORD=hoydigo
+      - MYSQL_DATABASE=hoydigo
+      - MYSQL_USER=hoydigo
+      - MYSQL_PASSWORD=hoydigo
+    ports:
+      - '8071:3306'
 
-    hd-mariadb:
-      image: mariadb:10.4
-      container_name: hoydigo-db
-      working_dir: /data
-      volumes:
-        - ./data:/data
-      environment:
-        - MYSQL_ROOT_PASSWORD=h0yd1g0
-        - MYSQL_DATABASE=hoydigo
-        - MYSQL_USER=hoydigo
-        - MYSQL_PASSWORD=h0yd1g0
-      ports:
-        - "8085:3306"
+  hoydigo-api-webserver:
+    image: 'nginx:alpine'
+    working_dir: /app
+    volumes:
+      - './src:/app'
+      - './phpdocker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf'
+    ports:
+      - '8070:80'
 
-    hd-webserver:
-      image: nginx:alpine
-      container_name: hoydigo-webserver
-      working_dir: /app
-      volumes:
-          - ./src:/app
-          - ./phpdocker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
-      ports:
-       - "8084:80"
-
-    hd-php-fpm:
-      build: phpdocker/php-fpm
-      container_name: hoydigo-php
-      working_dir: /app
-      environment:
-        PHP_IDE_CONFIG: "serverName=Docker"
-        DEBUG: 1
-      volumes:
-        - ./src:/app
-        - ./phpdocker/php-fpm/php-ini-overrides.ini:/etc/php/7.4/fpm/conf.d/99-overrides.ini
+  hoydigo-api-php:
+    build: phpdocker/php-fpm
+    working_dir: /app
+    environment:
+      PHP_IDE_CONFIG: "serverName=Docker"
+      DEBUG: 1
+    volumes:
+      - './src:/app'
+      - './phpdocker/php-fpm/php-ini-overrides.ini:/etc/php/7.4/fpm/conf.d/99-overrides.ini'

@@ -11,5 +11,7 @@
 /src/Homestead.yaml
 /src/npm-debug.log
 /src/yarn-error.log
+/src/composer.lock
+/src/package-lock.json
 .idea/
 redoc-static.html

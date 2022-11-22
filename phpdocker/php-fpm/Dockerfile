@@ -1,13 +1,30 @@
-FROM phpdockerio/php74-fpm:latest
+FROM phpdockerio/php:8.1-fpm
 WORKDIR "/app"
 
-# Fix debconf warnings upon build
-ARG DEBIAN_FRONTEND=noninteractive
-
-# Install selected extensions and other stuff
-RUN apt-get update \
-    && apt-get -y --no-install-recommends install  php-memcached php7.4-mysql php-redis php7.4-sqlite3 php7.4-xdebug php7.4-dba php7.4-gmp php-imagick php7.4-imap php7.4-ldap php-mongodb php7.4-odbc php7.4-phpdbg \
-    && apt-get clean; rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
+RUN apt-get update; \
+    apt-get -y --no-install-recommends install \
+        php8.1-bz2 \ 
+        php8.1-dba \ 
+        php8.1-gd \ 
+        php8.1-gmp \ 
+        php8.1-imap \ 
+        php8.1-imagick \ 
+        php8.1-interbase \ 
+        php8.1-ldap \ 
+        php8.1-memcached \ 
+        php8.1-mongodb \ 
+        php8.1-mysql \ 
+        php8.1-odbc \ 
+        php8.1-phpdbg \ 
+        php8.1-pspell \ 
+        php8.1-redis \ 
+        php8.1-soap \ 
+        php8.1-sqlite3 \ 
+        php8.1-xdebug \ 
+        php8.1-xsl \ 
+        php8.1-yaml; \
+    apt-get clean; \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
 
 # Install git
 RUN apt-get update \
@@ -21,5 +38,5 @@ RUN apt-get update \
     && apt-get clean; rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
 
 # Install laravel
-RUN composer global require "laravel/installer" 
+RUN composer global require "laravel/installer"
 ENV PATH="/root/.composer/vendor/bin:${PATH}"
