@@ -15,7 +15,7 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        'App\Events\InfluencerCreated' => [
+        'App\Events\InfluencerTwitterDataRequested' => [
             'App\Listeners\PullTwitterInfluencerData',
         ],
     ];

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\api\v1\admin;
 
-use App\Events\InfluencerCreated;
+use App\Events\InfluencerTwitterDataRequested;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\admin\StoreInfluencerRequest;
 use App\Http\Requests\admin\UpdateInfluencerRequest;
@@ -12,6 +12,7 @@ use App\Models\Influencer;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Log;
 
 class InfluencerController extends Controller
 {
@@ -52,7 +53,7 @@ class InfluencerController extends Controller
             ]);
             $influencer->refresh();
 
-            event(new InfluencerCreated($influencer));
+            event(new InfluencerTwitterDataRequested($influencer));
 
             return response()->json(['message' => 'Influencer ' . $influencer->name . ' created successfully'], 200);
 
@@ -141,6 +142,38 @@ class InfluencerController extends Controller
             return response()->json(null, 204);
 
         } catch (\Throwable $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
+    }
+
+    /**
+     * Set an influenter twitter data request
+     *
+     * @param string $influencer_id
+     *
+     * @return JsonResponse
+     */
+    public function pullTwitterData(string $influencer_id): JsonResponse
+    {
+        try {
+            $influencer = Influencer::find($influencer_id);
+
+            if (is_null($influencer)) {
+                return response()->json(['message' => 'Influencer not found'], 404);
+            }
+
+            event(new InfluencerTwitterDataRequested($influencer));
+
+            return response()->json(['message' => 'Puller process was set for the influencer.'], 200);
+
+        } catch (\Throwable $e) {
+            Log::error(
+                'Pull Twitter Data action, ' .
+                'event: Error pull twitter data, ' .
+                "influencer_id: $influencer_id, " .
+                'message: ' . $e->getMessage()
+            );
+
             return response()->json(['message' => $e->getMessage()], 500);
         }
     }

@@ -303,4 +303,24 @@ class InfluencerControllerTest extends TestApi
         $response->assertJsonPath('message', 'Exception test');
     }
 
+    /**
+     * @test
+     *
+     * @return void
+     */
+    public function user_can_pull_influencer_twitter_data(): void
+    {
+        Influencer::truncate();
+        $token = $this->getToken();
+
+        $mock_influencer_data = $this->getInfluencerMockData();
+        Influencer::create($mock_influencer_data);
+
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)
+            ->json('POST', self::ENDPOINT_ADMIN_INFLUENCER . '/1/pull-twitter-data');
+
+        $response->assertStatus(200);
+        $response->assertJsonPath('message', 'Puller process was set for the influencer.');
+    }
+
 }

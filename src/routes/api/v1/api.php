@@ -39,4 +39,5 @@ Route::prefix('/admin')->group(function () {
     Route::get('/influencer/{influencer_id}', 'App\Http\Controllers\api\v1\admin\InfluencerController@show')->middleware(['auth:api', 'scopes:admin:influencer:get']);
     Route::patch('/influencer/{influencer_id}', 'App\Http\Controllers\api\v1\admin\InfluencerController@update')->middleware(['auth:api', 'scopes:admin:influencer:update']);
     Route::delete('/influencer/{influencer_id}', 'App\Http\Controllers\api\v1\admin\InfluencerController@destroy')->middleware(['auth:api', 'scopes:admin:influencer:delete']);
+    Route::post('/influencer/{influencer_id}/pull-twitter-data', 'App\Http\Controllers\api\v1\admin\InfluencerController@pullTwitterData')->middleware(['auth:api', 'scopes:admin:influencer:create']);
 });

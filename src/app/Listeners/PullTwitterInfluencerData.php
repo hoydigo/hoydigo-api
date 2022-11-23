@@ -3,7 +3,7 @@
 namespace App\Listeners;
 
 use App\Classes\Twitter\TwitterClient;
-use App\Events\InfluencerCreated;
+use App\Events\InfluencerTwitterDataRequested;
 use App\Exceptions\TwitterClientCouldNotGetUserByUsernameException;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
@@ -31,10 +31,10 @@ class PullTwitterInfluencerData implements ShouldQueue
     /**
      * Handle the event.
      *
-     * @param  InfluencerCreated  $event
+     * @param  InfluencerTwitterDataRequested  $event
      * @return void
      */
-    public function handle(InfluencerCreated $event)
+    public function handle(InfluencerTwitterDataRequested $event)
     {
         try {
             $twitter_client = new TwitterClient(Config::get('twitter.bearer_token'));
