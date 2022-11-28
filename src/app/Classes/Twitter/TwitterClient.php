@@ -73,7 +73,7 @@ class TwitterClient
     }
 
     /**
-     * Pull twits by user
+     * Pull tweets by user
      *
      * @param string $user_id
      *
@@ -81,7 +81,7 @@ class TwitterClient
      *
      * @throws TwitterClientCouldNotGetUserByUsernameException
      */
-    public function getTwitsByUserId (string $user_id): array
+    public function getTweetsByUserId (string $user_id): array
     {
         try {
             $fields = [
