@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateOriginalTweetsTable extends Migration
+class CreateInfluencerTweetsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,12 @@ class CreateOriginalTweetsTable extends Migration
      */
     public function up()
     {
-        Schema::create('original_tweets', function (Blueprint $table) {
-            $table->string('id')->nullable();
+        Schema::create('influencer_tweets', function (Blueprint $table) {
+            $table->string('influencer_twitter_id')->nullable();
+            $table->string('tweet_id')->nullable();
             $table->string('conversation_id')->nullable();
-            $table->string('author_id')->nullable();
             $table->boolean('retweeted')->default(false);
-            $table->string('original_author_username')->nullable();
-            $table->string('original_author_id')->nullable();
-            $table->text('tweet')->nullable();
+            $table->string('published_at')->nullable();
             $table->timestamps();
         });
     }
@@ -32,6 +30,6 @@ class CreateOriginalTweetsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('original_tweets');
+        Schema::dropIfExists('influencer_tweets');
     }
 }
