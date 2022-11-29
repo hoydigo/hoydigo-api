@@ -9,7 +9,7 @@ class OriginalTweet extends Model
 {
     use HasFactory;
 
-    protected $keyType = 'string';
+    protected $primaryKey = null;
 
     public $incrementing = false;
 

@@ -74,10 +74,12 @@ class TwitterPullTweets extends Command
 
             try {
                 $is_retweeted = (strpos($tweet->text, 'RT') === 0);
+                $json_tweet = json_encode($tweet);
 
                 OriginalTweet::updateOrCreate(
                     [
-                        'id' => $tweet->id
+                        'id'        => $tweet->id,
+                        'author_id' => $tweet->author_id
                     ],
                     [
                         'id'                        => $tweet->id,
@@ -86,7 +88,7 @@ class TwitterPullTweets extends Command
                         'retweeted'                 => $is_retweeted,
                         'original_author_username'  => $is_retweeted ? $tweet->entities->mentions[0]->username : null,
                         'original_author_id'        => $is_retweeted ? $tweet->entities->mentions[0]->id : null,
-                        'tweet'                     => json_encode($tweet)
+                        'tweet'                     => $json_tweet
                     ]
                 );
 
