@@ -24,7 +24,7 @@ class TwitterPullTweets extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Pull tweets from tweeter.';
 
     /**
      * Create a new command instance.
