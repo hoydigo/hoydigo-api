@@ -3,6 +3,9 @@
 namespace App\Console\Commands\Twitter;
 
 use App\Models\Influencer;
+use App\Models\InfluencerTweet;
+use App\Models\OriginalTweet;
+use App\Models\Tweet;
 use Illuminate\Console\Command;
 
 class TwitterStoreTweets extends Command
@@ -12,7 +15,7 @@ class TwitterStoreTweets extends Command
      *
      * @var string
      */
-    protected $signature = 'twitter:pull-tweets {total_tweets_by_influencer?} {influencer_username?}';
+    protected $signature = 'twitter:store-tweets {total_tweets_by_influencer?} {influencer_username?}';
 
     /**
      * The console command description.
@@ -51,6 +54,50 @@ class TwitterStoreTweets extends Command
         if (!empty($influencer_username) && !$influencer) {
             echo "The influencer with the specific username was not found.\r\n";
             return 0;
+        }
+
+        $original_tweets = new OriginalTweet();
+
+        if ($influencer) {
+            $original_tweets = $original_tweets->where('author_id', $influencer->twitter_id);
+        }
+
+        $original_tweets = $original_tweets->orderBy('conversation_id', 'desc')->limit($total_tweets_by_influencer)->get();
+
+        foreach ($original_tweets as $original_tweet) {
+            $tweet = json_decode($original_tweet->tweet);
+            $author_id = $original_tweet->original_author_id ?? $original_tweet->author_id;
+
+            Tweet::updateOrCreate(
+                [
+                    'id'        => $original_tweet->id,
+                    'author_id' => $author_id
+                ],
+                [
+                    'id'        => $original_tweet->id,
+                    'author_id' => $author_id,
+                    'text'      => $tweet->text,
+                    'source'    => $tweet->source,
+                    'lang'      => $tweet->lang,
+                ]
+            );
+
+            InfluencerTweet::updateOrCreate(
+                [
+                    'influencer_twitter_id' => $original_tweet->author_id,
+                    'tweet_id'              => $original_tweet->id,
+                    'conversation_id'       => $original_tweet->conversation_id,
+                ],
+                [
+                    'influencer_twitter_id' => $original_tweet->author_id,
+                    'tweet_id'              => $original_tweet->id,
+                    'conversation_id'       => $original_tweet->conversation_id,
+                    'retweeted'             => (bool)$original_tweet->retweeted,
+                    'published_at'          => $tweet->created_at
+                ]
+            );
+
+            echo "Tweet $original_tweet->id of the user @$original_tweet->original_author_username was saved successfully.\r\n";
         }
 
         return 0;

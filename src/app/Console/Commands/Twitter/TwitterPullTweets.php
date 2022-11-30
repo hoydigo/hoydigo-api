@@ -53,8 +53,8 @@ class TwitterPullTweets extends Command
             if ($influencer->twitter_id) {
                 echo "Pull Twits for @$influencer->twitter_username with twitter_id $influencer->twitter_id \r\n";
 
-                $twits = $twitter_client->getTweetsByUserId($influencer->twitter_id);
-                $this->storeTweets(!empty($twits) ? $twits : []);
+                $tweets = $twitter_client->getTweetsByUserId($influencer->twitter_id);
+                $this->storeTweets(!empty($tweets) ? $tweets : []);
             }
         }
 
@@ -64,24 +64,30 @@ class TwitterPullTweets extends Command
     /**
      * Store each tweet into the DB
      *
-     * @param array $twits
+     * @param array $tweets
      *
      * @return void
      */
-    private function storeTweets(array $twits): void
+    private function storeTweets(array $tweets): void
     {
-        foreach ($twits as $tweet) {
+        foreach ($tweets as $tweet) {
+            $json_tweet = null;
 
             try {
                 $is_retweeted = (strpos($tweet->text, 'RT') === 0);
                 $json_tweet = json_encode($tweet);
 
-                OriginalTweet::updateOrCreate(
-                    [
-                        'id'        => $tweet->id,
-                        'author_id' => $tweet->author_id
-                    ],
-                    [
+                $original_tweet = OriginalTweet::where('id', $tweet->id)
+                    ->where('conversation_id', $tweet->conversation_id)
+                    ->where('author_id', $tweet->author_id)
+                    ->first();
+
+                if ($original_tweet) {
+                    $original_tweet->tweet = $json_tweet;
+                    $original_tweet->save();
+
+                } else {
+                    OriginalTweet::create([
                         'id'                        => $tweet->id,
                         'conversation_id'           => $tweet->conversation_id,
                         'author_id'                 => $tweet->author_id,
@@ -89,8 +95,8 @@ class TwitterPullTweets extends Command
                         'original_author_username'  => $is_retweeted ? $tweet->entities->mentions[0]->username : null,
                         'original_author_id'        => $is_retweeted ? $tweet->entities->mentions[0]->id : null,
                         'tweet'                     => $json_tweet
-                    ]
-                );
+                    ]);
+                }
 
                 echo "Tweet $tweet->id with author_id $tweet->author_id was saved successfully.\r\n";
 
