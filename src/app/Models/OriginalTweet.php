@@ -9,14 +9,12 @@ class OriginalTweet extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = null;
-
-    public $incrementing = false;
-
     protected $fillable = [
         'id',
+        'twitter_id',
         'conversation_id',
         'author_id',
+        'author_username',
         'retweeted',
         'original_author_username',
         'original_author_id',

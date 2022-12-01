@@ -66,38 +66,40 @@ class TwitterStoreTweets extends Command
 
         foreach ($original_tweets as $original_tweet) {
             $tweet = json_decode($original_tweet->tweet);
-            $author_id = $original_tweet->original_author_id ?? $original_tweet->author_id;
 
             Tweet::updateOrCreate(
                 [
-                    'id'        => $original_tweet->id,
-                    'author_id' => $author_id
+                    'twitter_id' => $original_tweet->twitter_id,
+                    'author_id'  => $original_tweet->original_author_id
                 ],
                 [
-                    'id'        => $original_tweet->id,
-                    'author_id' => $author_id,
-                    'text'      => $tweet->text,
-                    'source'    => $tweet->source,
-                    'lang'      => $tweet->lang,
+                    'twitter_id'        => $original_tweet->twitter_id,
+                    'author_id'         => $original_tweet->original_author_id,
+                    'author_username'   => $original_tweet->original_author_username,
+                    'text'              => $tweet->text,
+                    'source'            => $tweet->source,
+                    'lang'              => $tweet->lang,
                 ]
             );
 
             InfluencerTweet::updateOrCreate(
                 [
                     'influencer_twitter_id' => $original_tweet->author_id,
-                    'tweet_id'              => $original_tweet->id,
+                    'tweet_twitter_id'      => $original_tweet->twitter_id,
                     'conversation_id'       => $original_tweet->conversation_id,
                 ],
                 [
                     'influencer_twitter_id' => $original_tweet->author_id,
-                    'tweet_id'              => $original_tweet->id,
+                    'tweet_twitter_id'      => $original_tweet->twitter_id,
                     'conversation_id'       => $original_tweet->conversation_id,
                     'retweeted'             => (bool)$original_tweet->retweeted,
                     'published_at'          => $tweet->created_at
                 ]
             );
 
-            echo "Tweet $original_tweet->id of the user @$original_tweet->original_author_username was saved successfully.\r\n";
+            $influencer_twitter_username = $original_tweet->original_author_username ?? ($influencer->twitter_username ?? '');
+
+            echo "Tweet $original_tweet->id of the user @$influencer_twitter_username was saved successfully.\r\n";
         }
 
         return 0;

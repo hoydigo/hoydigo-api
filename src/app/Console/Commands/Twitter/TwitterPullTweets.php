@@ -54,7 +54,7 @@ class TwitterPullTweets extends Command
                 echo "Pull Twits for @$influencer->twitter_username with twitter_id $influencer->twitter_id \r\n";
 
                 $tweets = $twitter_client->getTweetsByUserId($influencer->twitter_id);
-                $this->storeTweets(!empty($tweets) ? $tweets : []);
+                $this->storeTweets((!empty($tweets) ? $tweets : []), $influencer->twitter_username);
             }
         }
 
@@ -65,10 +65,11 @@ class TwitterPullTweets extends Command
      * Store each tweet into the DB
      *
      * @param array $tweets
+     * @param string|null $twitter_username
      *
      * @return void
      */
-    private function storeTweets(array $tweets): void
+    private function storeTweets(array $tweets, string $twitter_username = null): void
     {
         foreach ($tweets as $tweet) {
             $json_tweet = null;
@@ -77,7 +78,7 @@ class TwitterPullTweets extends Command
                 $is_retweeted = (strpos($tweet->text, 'RT') === 0);
                 $json_tweet = json_encode($tweet);
 
-                $original_tweet = OriginalTweet::where('id', $tweet->id)
+                $original_tweet = OriginalTweet::where('twitter_id', $tweet->id)
                     ->where('conversation_id', $tweet->conversation_id)
                     ->where('author_id', $tweet->author_id)
                     ->first();
@@ -88,12 +89,13 @@ class TwitterPullTweets extends Command
 
                 } else {
                     OriginalTweet::create([
-                        'id'                        => $tweet->id,
+                        'twitter_id'                => $tweet->id,
                         'conversation_id'           => $tweet->conversation_id,
                         'author_id'                 => $tweet->author_id,
+                        'author_username'           => $twitter_username,
                         'retweeted'                 => $is_retweeted,
-                        'original_author_username'  => $is_retweeted ? $tweet->entities->mentions[0]->username : null,
-                        'original_author_id'        => $is_retweeted ? $tweet->entities->mentions[0]->id : null,
+                        'original_author_username'  => $is_retweeted ? $tweet->entities->mentions[0]->username : $twitter_username,
+                        'original_author_id'        => $is_retweeted ? $tweet->entities->mentions[0]->id : $tweet->author_id,
                         'tweet'                     => $json_tweet
                     ]);
                 }

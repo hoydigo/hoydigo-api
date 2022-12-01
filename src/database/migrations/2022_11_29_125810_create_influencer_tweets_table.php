@@ -15,7 +15,7 @@ class CreateInfluencerTweetsTable extends Migration
     {
         Schema::create('influencer_tweets', function (Blueprint $table) {
             $table->string('influencer_twitter_id')->nullable();
-            $table->string('tweet_id')->nullable();
+            $table->string('tweet_twitter_id')->nullable();
             $table->string('conversation_id')->nullable();
             $table->boolean('retweeted')->default(false);
             $table->string('published_at')->nullable();

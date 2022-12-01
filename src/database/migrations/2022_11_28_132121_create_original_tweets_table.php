@@ -14,9 +14,11 @@ class CreateOriginalTweetsTable extends Migration
     public function up()
     {
         Schema::create('original_tweets', function (Blueprint $table) {
-            $table->string('id')->nullable();
+            $table->bigIncrements('id');
+            $table->string('twitter_id')->nullable();
             $table->string('conversation_id')->nullable();
             $table->string('author_id')->nullable();
+            $table->string('author_username')->nullable();
             $table->boolean('retweeted')->default(false);
             $table->string('original_author_username')->nullable();
             $table->string('original_author_id')->nullable();

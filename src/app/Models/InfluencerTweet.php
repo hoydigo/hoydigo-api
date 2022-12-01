@@ -15,7 +15,7 @@ class InfluencerTweet extends Model
 
     protected $fillable = [
         'influencer_twitter_id',
-        'tweet_id',
+        'tweet_twitter_id',
         'conversation_id',
         'retweeted',
         'published_at'

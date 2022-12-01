@@ -9,13 +9,11 @@ class Tweet extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = null;
-
-    public $incrementing = false;
-
     protected $fillable = [
         'id',
+        'twitter_id',
         'author_id',
+        'author_username',
         'text',
         'source',
         'lang'

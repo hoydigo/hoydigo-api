@@ -14,8 +14,10 @@ class CreateTweetsTable extends Migration
     public function up()
     {
         Schema::create('tweets', function (Blueprint $table) {
-            $table->string('id')->nullable();
+            $table->bigIncrements('id');
+            $table->string('twitter_id')->nullable();
             $table->string('author_id')->nullable();
+            $table->string('author_username')->nullable();
             $table->string('text', 1000)->nullable();
             $table->string('source')->nullable();
             $table->string('lang', 10)->nullable();
