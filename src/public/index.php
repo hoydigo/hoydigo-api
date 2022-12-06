@@ -1,5 +1,5 @@
 <?php
-
+print_r('HOLA'); die;
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Http\Request;
 
