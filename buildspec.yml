@@ -5,6 +5,8 @@ phases:
     commands:
       - apt-get update
       - apt-get install zip
+      - cd /usr/local/src/src
+      - composer install --prefer-dist --no-interaction
   build:
     commands:
       - composer install --prefer-dist --no-interaction
