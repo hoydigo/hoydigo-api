@@ -5,7 +5,7 @@ phases:
     commands:
       - apt-get update
       - apt-get install zip
-      - cd /usr/local/src/src
+      - cd /var/www/html/src
       - composer install --prefer-dist --no-interaction
   build:
     commands:
