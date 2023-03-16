@@ -1,0 +1,14 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - apt-get update
+      - apt-get install zip
+  build:
+    commands:
+      - composer install --prefer-dist --no-interaction
+      - zip -r app.zip ./*
+artifacts:
+  files:
+    - app.zip
