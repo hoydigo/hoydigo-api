@@ -3,17 +3,13 @@ version: 0.2
 phases:
   pre_build:
     commands:
-      - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-      - composer --version
+      - curl -sS https://getcomposer.org/installer | php
+      - php composer.phar check-platform-reqs
+      - php composer.phar clear-cache
   build:
     commands:
-      - echo Build started on `date`
-      - npm install
-      - composer install --no-scripts
-      - zip -r my-app.zip .
-  post_build:
-    commands:
-      - echo Build completed on `date`
+      - php composer.phar install --no-scripts
+      - zip -r my-app.zip *
 artifacts:
   files:
     - my-app.zip
