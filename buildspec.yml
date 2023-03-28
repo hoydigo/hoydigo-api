@@ -4,14 +4,14 @@ phases:
   pre_build:
     commands:
       - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-      - php composer-setup.php --quiet
+      - php composer-setup.php --install-dir=/usr/local/bin --filename=composer
       - php -r "unlink('composer-setup.php');"
       - composer --version
   build:
     commands:
       - npm install
       - composer install --ignore-platform-reqs
-      - zip -r my-app.zip .
+      - zip -r my-app.zip *
 artifacts:
   files:
     - my-app.zip
