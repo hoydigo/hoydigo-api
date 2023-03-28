@@ -8,6 +8,8 @@ phases:
   build:
     commands:
       - zip -r app.zip ./*
+      - cd src
+      - composer install --prefer-dist --no-interaction
 artifacts:
   files:
     - app.zip
