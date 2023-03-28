@@ -5,11 +5,8 @@ phases:
     commands:
       - apt-get update
       - apt-get install zip
-      - cd /var/www/html/src
-      - composer install --prefer-dist --no-interaction
   build:
     commands:
-      - composer install --prefer-dist --no-interaction
       - zip -r app.zip ./*
 artifacts:
   files:
