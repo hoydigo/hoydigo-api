@@ -5,13 +5,10 @@ phases:
     commands:
   build:
     commands:
-      - yum install zip
       - zip -r app.zip ./*
-      - yum install php-cli php-zip php-json php-mbstring
       - curl -sS https://getcomposer.org/installer -o composer-setup.php
       - php composer-setup.php --install-dir=/usr/local/bin --filename=composer
       - curl -sL https://rpm.nodesource.com/setup_16.x | sudo -E bash -
-      - yum install -y nodejs
       - cd /var/www/html
       - unzip app.zip src/*
       - npm install
