@@ -1,0 +1,40 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      php: 7.4
+    commands:
+      - apt-get update
+      - apt-get install -y zip
+      - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+      - php composer-setup.php --install-dir=/usr/local/bin --filename=composer
+      - composer install --no-dev --no-interaction --optimize-autoloader
+  pre_build:
+    commands:
+      - echo Nothing to do in pre_build phase...
+  build:
+    commands:
+      - echo Build started on `date`
+      - echo Building the Docker image...
+      - docker build -t my-php-app .
+  post_build:
+    commands:
+      - echo Build completed on `date`
+artifacts:
+  files:
+    - Dockerrun.aws.json
+    - .ebextensions/**
+    - .platform/**
+    - vendor/**
+    - .env
+    - public/**
+    - app/**
+    - bootstrap/**
+    - config/**
+    - database/**
+    - resources/**
+    - routes/**
+    - storage/**
+    - composer.json
+    - composer.lock

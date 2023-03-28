@@ -1,0 +1,23 @@
+
+dphp:S103"KSplit this 134 characters long line (which is greater than 120 authorized).(È¼¶‹ÿÿÿÿÿ
+dphp:S103"KSplit this 166 characters long line (which is greater than 120 authorized).(óÖš¤ùÿÿÿÿ
+^php:S103"KSplit this 169 characters long line (which is greater than 120 authorized).(ÅÒ£J
+_php:S103"KSplit this 185 characters long line (which is greater than 120 authorized).(ÑªéŠ
+dphp:S103"KSplit this 192 characters long line (which is greater than 120 authorized).(ªœµÍüÿÿÿÿ
+_php:S103"KSplit this 194 characters long line (which is greater than 120 authorized).(…Á§µ
+_php:S103"KSplit this 146 characters long line (which is greater than 120 authorized).(ÛÉ¡€
+dphp:S103 "KSplit this 149 characters long line (which is greater than 120 authorized).(ã¡óëøÿÿÿÿ
+dphp:S103!"KSplit this 158 characters long line (which is greater than 120 authorized).(‡ Şêşÿÿÿÿ
+dphp:S103""KSplit this 165 characters long line (which is greater than 120 authorized).(«î¦øÿÿÿÿ
+dphp:S103#"KSplit this 167 characters long line (which is greater than 120 authorized).(ÉÉÃıÿÿÿÿ
+dphp:S103%"KSplit this 152 characters long line (which is greater than 120 authorized).(º›ûÿÿÿÿ
+_php:S103&"KSplit this 155 characters long line (which is greater than 120 authorized).(®ÈÂ‰
+_php:S103'"KSplit this 166 characters long line (which is greater than 120 authorized).(Ïï’İ
+dphp:S103("KSplit this 173 characters long line (which is greater than 120 authorized).(¸åŸˆıÿÿÿÿ
+_php:S103)"KSplit this 175 characters long line (which is greater than 120 authorized).(¯úÙá
+kphp:S103*"KSplit this 199 characters long line (which is greater than 120 authorized).(¨½íòşÿÿÿÿ8Õí•¤Ê0
+k	php:S1808"QPut exactly one space between the "function" keyword and the opening parenthesis.(´…Ï‰ÿÿÿÿÿ
+q	php:S1192'"\Define a constant instead of duplicating this literal "/influencer/{influencer_id}" 3 times.(Ïï’İ
+d	php:S1192"JDefine a constant instead of duplicating this literal "auth:api" 17 times.(È¼¶‹ÿÿÿÿÿ
+{	php:S1192"fDefine a constant instead of duplicating this literal "/political-party/{political_party_id}" 3 times.(ÑªéŠ
+r	php:S1192!"XDefine a constant instead of duplicating this literal "/position/{position_id}" 3 times.(‡ Şêşÿÿÿÿ

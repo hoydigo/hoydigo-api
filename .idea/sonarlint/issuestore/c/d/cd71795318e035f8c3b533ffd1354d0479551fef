@@ -1,0 +1,11 @@
+
+^php:S103e"KSplit this 129 characters long line (which is greater than 120 authorized).(€’…S
+vphp:S117."bRename this local variable "$political_party" to match the regular expression ^[a-z][a-zA-Z0-9]*$.(†«§¨
+tphp:S117D"`Rename this parameter "$political_party_id" to match the regular expression ^[a-z][a-zA-Z0-9]*$.(â¼Í¨
+{php:S117G"bRename this local variable "$political_party" to match the regular expression ^[a-z][a-zA-Z0-9]*$.(·¤°Ìùÿÿÿÿ
+yphp:S117\"`Rename this parameter "$political_party_id" to match the regular expression ^[a-z][a-zA-Z0-9]*$.(‚ÉË­øÿÿÿÿ
+{php:S117_"bRename this local variable "$political_party" to match the regular expression ^[a-z][a-zA-Z0-9]*$.(·¤°Ìùÿÿÿÿ
+tphp:S117z"`Rename this parameter "$political_party_id" to match the regular expression ^[a-z][a-zA-Z0-9]*$.(£íû¥
+{php:S117}"bRename this local variable "$political_party" to match the regular expression ^[a-z][a-zA-Z0-9]*$.(·¤°Ìùÿÿÿÿ
+o	php:S1192J"ZDefine a constant instead of duplicating this literal "Political party not found" 3 times.(Û”Ñ¶
+J	php:S1481."5Remove this unused "$political_party" local variable.(†«§¨
