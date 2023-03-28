@@ -6,7 +6,6 @@ phases:
   build:
     commands:
       - zip -r app.zip ./*
-      - cd /var/www/html
       - unzip app.zip src/*
       - npm install
       - composer install --prefer-dist --no-interaction
