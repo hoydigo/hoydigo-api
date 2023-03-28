@@ -1,9 +1,0 @@
-
-dphp:S103A"KSplit this 123 characters long line (which is greater than 120 authorized).(¿ßòÁýÿÿÿÿ
-dphp:S103d"KSplit this 126 characters long line (which is greater than 120 authorized).(ÖÅÅ›ýÿÿÿÿ
-`	php:S1940/"FUse the opposite operator '<=' instead and remove complement operator.(úñ­Îýÿÿÿÿ
-php:S117,"mRename this local variable "$total_tweets_by_influencer" to match the regular expression ^[a-z][a-zA-Z0-9]*$.(ÑÙ‡¯
-yphp:S117-"fRename this local variable "$influencer_username" to match the regular expression ^[a-z][a-zA-Z0-9]*$.(¯É†R
-{php:S117;"bRename this local variable "$original_tweets" to match the regular expression ^[a-z][a-zA-Z0-9]*$.(Íž§øÿÿÿÿ
-‡php:S117d"nRename this local variable "$influencer_twitter_username" to match the regular expression ^[a-z][a-zA-Z0-9]*$.(ÖÅÅ›ýÿÿÿÿ
-K	php:S1185 "6Remove this method "__construct" to simply inherit it.(ƒöÙƒ

@@ -1,8 +1,0 @@
-
-_php:S103Y"KSplit this 200 characters long line (which is greater than 120 authorized).(¶ç¾Î
-_php:S103Z"KSplit this 234 characters long line (which is greater than 120 authorized).(·È·ô
-_php:S103["KSplit this 174 characters long line (which is greater than 120 authorized).(üÃÇã
-_php:S103\"KSplit this 165 characters long line (which is greater than 120 authorized).(éºÖÞ
-u	php:S1808T"YRemove all space between the method name "getTweetsByUserId" and the opening parenthesis.(€Ÿ¦¯8ÌÎéóË0
-iphp:S117T"URename this parameter "$user_id" to match the regular expression ^[a-z][a-zA-Z0-9]*$.(€Ÿ¦¯
-	php:S1488g"^Immediately return this expression instead of assigning it to the temporary variable "$twits".(«œ…¿üÿÿÿÿ8Ý†ÂÏÊ0

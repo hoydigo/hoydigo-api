@@ -1,7 +1,0 @@
-
-_php:S103p"KSplit this 126 characters long line (which is greater than 120 authorized).(èêìô
-ophp:S117I"[Rename this parameter "$influencer_id" to match the regular expression ^[a-z][a-zA-Z0-9]*$.(ù–ŒÉ
-tphp:S117b"[Rename this parameter "$influencer_id" to match the regular expression ^[a-z][a-zA-Z0-9]*$.(Š¼û¬ùÿÿÿÿ
-pphp:S117ƒ"[Rename this parameter "$influencer_id" to match the regular expression ^[a-z][a-zA-Z0-9]*$.(îýÞþ
-uphp:S117œ"[Rename this parameter "$influencer_id" to match the regular expression ^[a-z][a-zA-Z0-9]*$.(¶ÊØçùÿÿÿÿ
-o	php:S1192P"UDefine a constant instead of duplicating this literal "Influencer not found" 4 times.(®®ê ýÿÿÿÿ

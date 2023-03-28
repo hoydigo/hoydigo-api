@@ -1,9 +1,0 @@
-
-dphp:S103a"KSplit this 131 characters long line (which is greater than 120 authorized).(ò§»ûÿÿÿÿ
-_php:S103b"KSplit this 125 characters long line (which is greater than 120 authorized).(·í¦
-zphp:S1170"aRename this local variable "$twitter_client" to match the regular expression ^[a-z][a-zA-Z0-9]*$.(İ˜œ•ùÿÿÿÿ
-rphp:S117H"^Rename this parameter "$twitter_username" to match the regular expression ^[a-z][a-zA-Z0-9]*$.(ôª÷
-vphp:S117K"]Rename this local variable "$json_tweet" to match the regular expression ^[a-z][a-zA-Z0-9]*$.(±ÿéüÿÿÿÿ
-xphp:S117N"_Rename this local variable "$is_retweeted" to match the regular expression ^[a-z][a-zA-Z0-9]*$.(‡ç¯şÿÿÿÿ
-zphp:S117Q"aRename this local variable "$original_tweet" to match the regular expression ^[a-z][a-zA-Z0-9]*$.(ŠÜ°Âşÿÿÿÿ
-K	php:S1185""6Remove this method "__construct" to simply inherit it.(ƒöÙƒ
