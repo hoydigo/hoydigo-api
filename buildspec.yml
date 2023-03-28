@@ -7,8 +7,7 @@ phases:
       nodejs: 12
     commands:
       - npm install
-      - php composer-setup.php --version=<version>
-      - php -r "unlink('composer-setup.php');"
+      - php -r "copy('https://getcomposer.org/installer', 'composer.phar');"
       - php composer.phar --version
       - composer install --ignore-platform-reqs --verbose
   build:
