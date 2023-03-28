@@ -7,7 +7,7 @@ phases:
       nodejs: 12
     commands:
       - npm install
-      - composer install --ignore-platform-reqs
+      - composer install --ignore-platform-reqs --verbose
   build:
     commands:
       - zip -r my-app.zip src/* vendor/* index.php
