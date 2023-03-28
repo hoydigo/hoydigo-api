@@ -3,13 +3,17 @@ version: 0.2
 phases:
   pre_build:
     commands:
-      - curl -sS https://getcomposer.org/installer | php
+      - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+      - php composer-setup.php
+      - php -r "unlink('composer-setup.php');"
+      - php composer.phar self-update
       - php composer.phar check-platform-reqs
-      - php composer.phar clear-cache
+      - php composer.phar install --no-scripts --no-autoloader
   build:
     commands:
-      - php composer.phar install --no-scripts
-      - zip -r my-app.zip *
+      - php composer.phar dump-autoload --no-scripts
+      - php composer.phar run-script post-install-cmd --no-interaction
+      - zip -r my-app.zip .
 artifacts:
   files:
     - my-app.zip
