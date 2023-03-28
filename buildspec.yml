@@ -3,12 +3,19 @@ version: 0.2
 phases:
   install:
     commands:
-      - apt-get update
-      - apt-get install zip
+      - yum update
+      - yum install zip
   build:
     commands:
       - zip -r app.zip ./*
-      - cd src
+      - yum install php-cli php-zip php-json php-mbstring
+      - curl -sS https://getcomposer.org/installer -o composer-setup.php
+      - php composer-setup.php --install-dir=/usr/local/bin --filename=composer
+      - curl -sL https://rpm.nodesource.com/setup_16.x | sudo -E bash -
+      - yum install -y nodejs
+      - cd /var/www/html
+      - unzip app.zip src/*
+      - npm install
       - composer install --prefer-dist --no-interaction
 artifacts:
   files:
