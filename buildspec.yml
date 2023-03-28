@@ -1,18 +1,16 @@
 version: 0.2
 
 phases:
-  pre_build:
+  install:
+    runtime-versions:
+      php: 7.4
+      nodejs: 12
     commands:
-      - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-      - php composer-setup.php
-      - php -r "unlink('composer-setup.php');"
-      - php composer.phar self-update
-      - php composer.phar check-platform-reqs
-      - php composer.phar install --no-scripts --no-autoloader
+      - curl -sS https://getcomposer.org/installer | php
+      - php composer.phar install --ignore-platform-reqs
+      - npm install
   build:
     commands:
-      - php composer.phar dump-autoload --no-scripts
-      - php composer.phar run-script post-install-cmd --no-interaction
       - zip -r my-app.zip .
 artifacts:
   files:
