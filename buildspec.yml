@@ -3,10 +3,9 @@ version: 0.2
 phases:
   install:
     commands:
-      - yum update
-      - yum install zip
   build:
     commands:
+      - yum install zip
       - zip -r app.zip ./*
       - yum install php-cli php-zip php-json php-mbstring
       - curl -sS https://getcomposer.org/installer -o composer-setup.php
