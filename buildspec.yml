@@ -4,12 +4,13 @@ phases:
   install:
     commands:
       - apt-get update
-      - apt-get install -y zip
-      - curl -sS https://getcomposer.org/installer | php
-      - mv composer.phar /usr/local/bin/composer
-    build:
-      commands:
-        - cd /codebuild/output/src && composer install
+      - apt-get install zip
+      - cd /var/www/html/src
+      - composer install --prefer-dist --no-interaction
+  build:
+    commands:
+      - composer install --prefer-dist --no-interaction
+      - zip -r app.zip ./*
 artifacts:
   files:
-    - '**/*'
+    - app.zip
