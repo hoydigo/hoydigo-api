@@ -2,13 +2,16 @@ version: 0.2
 
 phases:
   install:
+    runtime-versions:
+      php: 8.1
     commands:
-  build:
-    commands:
-      - zip -r app.zip ./*
-      - unzip app.zip src/*
-      - npm install
-      - composer install --prefer-dist --no-interaction
+      - apt-get update
+      - apt-get install -y zip
+      - curl -sS https://getcomposer.org/installer | php
+      - mv composer.phar /usr/local/bin/composer
+    build:
+      commands:
+        - cd /codebuild/output/src && composer install
 artifacts:
   files:
-    - app.zip
+    - '**/*'
