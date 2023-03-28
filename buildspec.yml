@@ -1,14 +1,12 @@
 version: 0.2
 
 phases:
-  install:
-    runtime-versions:
-      php: 7.4
-      nodejs: 12
+  pre_build:
     commands:
       - curl -sS https://getcomposer.org/installer | php
+      - php composer.phar self-update
+      - php composer.phar check-platform-reqs
       - php composer.phar install --ignore-platform-reqs
-      - npm install
   build:
     commands:
       - zip -r my-app.zip .
