@@ -10,7 +10,7 @@ phases:
   pre_build:
     commands:
       - mkdir -p .ebextensions/nginx/conf.d
-      - cp .ebextensions/nginx/conf.d/custom.conf .ebextensions/nginx/conf.d/custom.conf
+      - cp -f .ebextensions/nginx/conf.d/custom.conf .ebextensions/nginx/conf.d/custom.conf
   build:
     commands:
       - zip -r my-app.zip .
