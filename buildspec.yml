@@ -7,10 +7,6 @@ phases:
     commands:
       - curl -sS https://getcomposer.org/installer | php
       - php composer.phar install
-  pre_build:
-    commands:
-      - mkdir -p .ebextensions/nginx/conf.d
-      - cp -f .ebextensions/nginx/conf.d/custom.conf .ebextensions/nginx/conf.d/custom.conf
   build:
     commands:
       - zip -r my-app.zip .
