@@ -10,10 +10,6 @@ phases:
   build:
     commands:
       - zip -r my-app.zip .
-      - sudo rm -rf /var/www/html/*
-      - sudo unzip -o my-app.zip -d /var/www/html/
-      - sudo chown -R www-data:www-data /var/www/html
-      - sudo chmod -R 755 /var/www/html
 
 artifacts:
   files:
